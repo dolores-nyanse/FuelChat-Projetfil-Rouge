@@ -4,9 +4,10 @@
 
     <head>
         <title>FuelChat</title>
-        <link rel="stylesheet" href="style.css"> <!--on indique qu'on relie avec un fichier de type-->
-    </head>                                        <!--stylesheet(css) et la ref est style.css qui 
-                                                       est le nom du fichier-->    
+        <link rel="stylesheet" href="style.css"> <!--on indique qu'on relie avec un fichier de type tylesheet(css) et la ref est style.css qui 
+                                                       est le nom du fichiers-->
+        <script src="script.js" defer></script>  <!--on relie à la page java script-->
+    </head>                                        
      <body>
 
           <h1>FuelChat</h1>
@@ -17,8 +18,8 @@
     <p><label for="password">Mot de passe</label> <input type="password" id="password" required></p>
     <label for="checkbox"> se souvenir de moi</label><input type="checkbox" id="checkbox">
 
-    <p><button>se connecter</button></p>
-    <p><button>s'inscrire</button></p>
+    <p><button type="button" id="connexion"> se connecter</button></p>
+    <p><button  type="button" id="inscription"> s'inscrire</button></p>
      <P> <a href="motdepasse.html"> Mot de passe oublie ? </a> </P>
 
     </form>
