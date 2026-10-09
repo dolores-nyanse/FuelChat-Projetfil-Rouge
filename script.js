@@ -1,3 +1,5 @@
+//Gestion de la page d'acceuil
+
 console.log("Bienvenue sur FuelChat !");
 // On definit les variables pour retrouver les boutons 
 const boutonConnexion = document.getElementById("connexion");
@@ -22,4 +24,18 @@ boutonConnexion.addEventListener("click", function() {
     }
 });
 
+
+//Gestion de la page Conversation 
+
+const messageInput = document.getElementById("messageInput");
+const boutonEnvoyer = document.getElementById("boutonEnvoyer");
+const listeMessages = document.getElementById("listeMessages");
+
+boutonEnvoyer.addEventListener("click", () => {
+const message = messageInput.value;
+const nouveauMessage = document.createElement("div");
+nouveauMessage.textContent = message;
+
+listeMessages.appendChild(nouveauMessage);
+});
 
