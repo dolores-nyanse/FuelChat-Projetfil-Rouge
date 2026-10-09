@@ -1,7 +1,7 @@
 body{ background-color: #2b1e01;
       color: rgb(249, 246, 243);
       font-size: large;}
-h1{ color: chocolate;
+h1{ color: rgb(30, 171, 210);
     text-align: left;}
 h3{ color: white;
     text-align: center;
@@ -9,3 +9,54 @@ h3{ color: white;
     font-weight: bold;
 
 }
+#Navigation{
+    width: 20%;
+    height: 100vh;
+    float: left;
+}
+#Conversation {
+    width: 75%;
+    float: right;
+}
+#Navigation button {
+    width: 80%;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgb(30, 171, 210);
+    color: white;
+    border: none;
+}
+#Envoi {
+    margin-top: 20px;
+}
+
+#Envoi textarea {
+    width: 50%;
+    height: 10vh;
+    padding: 10px;
+    background-color: rgb(253, 255, 255);
+    color: rgb(95, 94, 94);
+    border: none;
+}
+
+#Envoi button {
+    width: 20%;
+    height: 5vh;
+    background-color: rgb(30, 171, 210);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+#Messages {
+    padding: 20px;
+    font-size: 18px;
+}
+
+
+kjbl
+
+
+
+
+
