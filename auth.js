@@ -38,10 +38,13 @@ boutonInscription.addEventListener("click", async function() {
         alert("Veuillez saisir une adresse courriel valide.");
         return;
     }
-
+    // la foncyion sign up 
     const { data, error } = await supabaseClient.auth.signUp({
         email: email,
-        password: password
+        password: password,
+        options: {
+        emailRedirectTo: "https://dolores-nyanse.github.io/FuelChat-Projetfil-Rouge/"
+    }
     });
 
     if (error) {
