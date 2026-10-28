@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contacts</title>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contacts - FuelChat</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="contacts.js" defer></script>
     </head>
     <body>
 <div id="contacts">
-    <div id="recherche" ><input type="search" placeholder="Rechercher un contact" ><button>Rechercher</button></div>
-    <button>Inviter</button>
-    <a href=Conversation.html>Conversations</a>
+    <div id="recherche" > 
+   <input type="search" id="rechercheContact" placeholder="Rechercher un contact">
+   <button type="button" id="boutonInviter">Inviter</button>
+    <a href=conversation.html>Conversations</a>
     <div id="listecontacts" >Liste des contacts</div>
     <div id="invitationsrecues" >InvitationsRecues</div>
     <div id="invitationsenvoyees" >InvitationsEnvoyees</div>
