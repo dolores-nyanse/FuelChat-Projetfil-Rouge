@@ -11,14 +11,42 @@
     <script src="contacts.js" defer></script>
     </head>
     <body>
+
 <div id="contacts">
-    <div id="recherche" > 
-   <input type="search" id="rechercheContact" placeholder="Rechercher un contact">
-   <button type="button" id="boutonInviter">Inviter</button>
-    <a href=conversation.html>Conversations</a>
-    <div id="listecontacts" >Liste des contacts</div>
-    <div id="invitationsrecues" >InvitationsRecues</div>
-    <div id="invitationsenvoyees" >InvitationsEnvoyees</div>
+
+    <h1>Mes contacts FuelChat</h1>
+
+    <!-- Recherche des utilisateurs -->
+    <div id="recherche">
+        <label for="rechercheContact">
+            Rechercher un utilisateur
+        </label>
+
+        <input
+            type="search"
+            id="rechercheContact"
+            placeholder="Nom d'utilisateur"
+        >
+
+        <button type="button" id="boutonRecherche">
+            Rechercher
+        </button>
+    </div>
+
+    <!-- Résultats de recherche -->
+    <h2>Résultats de recherche</h2>
+    <div id="resultatsRecherche"></div>
+
+    <!-- Contacts enregistrés -->
+    <h2>Ma liste de contacts</h2>
+    <div id="listecontacts"></div>
+
+    <!-- Navigation -->
+    <p>
+        <a href="conversation.html">Conversations</a>
+    </p>
+
 </div>
+
     </body>
 </html>
