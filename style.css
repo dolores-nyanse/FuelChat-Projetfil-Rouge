@@ -54,5 +54,24 @@ h3{ color: white;
     font-size: 18px;
 }
 
+/* ===== AJOUT : liste des chats ===== */
+#listeChats {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid rgb(120, 100, 60);
+}
 
+#listeChats button {
+    background-color: #4a3708;
+    cursor: pointer;
+}
+
+#listeChats button:hover {
+    background-color: #5e470b;
+}
+
+/* Chat actuellement ouvert */
+#listeChats button.chatActif {
+    background-color: rgb(30, 171, 210);
+}
 
