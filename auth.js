@@ -19,40 +19,57 @@ const boutonInscription = document.getElementById("inscription");
 console.log(boutonInscription);
 console.log(boutonConnexion);
 
-// On definit les variables pour retrouver les champs de texte pour l'email et le mot de passe
+// On definit les variables pour retrouver les champs de texte pour l'email, le mot de passe  et username
 const champEmail = document.getElementById("email");
 const champPassword = document.getElementById("password");
+const champUsername = document.getElementById("username");
 
 // On fait fonctioner l'inscription
 boutonInscription.addEventListener("click", async function() {
 
     const email = champEmail.value.trim();
     const password = champPassword.value;
+    const username = champUsername.value.trim();
 
-    if (email === "" || password === "") {
-        alert("Veuillez remplir tous les champs.");
+    // Vérifier le nom d'utilisateur
+    if (!/^[a-zA-Z0-9_]{3,40}$/.test(username)) {
+        alert("Nom invalide : 3 à 40 caractères, lettres, chiffres ou _.");
         return;
     }
 
+    // Vérifier le courriel
     if (!champEmail.checkValidity()) {
         alert("Veuillez saisir une adresse courriel valide.");
         return;
     }
-    // la foncyion sign up 
+
+    // Vérifier le mot de passe
+    if (password.length < 6) {
+        alert("Le mot de passe doit contenir au moins 6 caractères.");
+        return;
+    }
+
+    // Inscription avec Supabase
     const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
         options: {
-        emailRedirectTo: "https://dolores-nyanse.github.io/FuelChat-Projetfil-Rouge/"
-    }
+            data: {
+                username: username
+            },
+            emailRedirectTo:
+                "https://dolores-nyanse.github.io/FuelChat-Projetfil-Rouge/"
+        }
     });
 
     if (error) {
-        alert("Erreur : " + error.message);
+        console.error("Erreur d'inscription :", error.message);
+        alert("Inscription impossible : " + error.message);
     } else {
-        alert("Inscription effectuée ! Vérifiez votre courriel si une confirmation est demandée.");
+        alert("Demande d'inscription reçue ! Vérifiez votre courriel.");
     }
 });
+
 // on fait fonctioner la connexion
 boutonConnexion.addEventListener("click", async function() {
 
