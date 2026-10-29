@@ -5,23 +5,33 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="Navigation">   <!--zone de navigation entre le menu-->
-             <div><button>Settings</button></div>
-             <div><button>Contacts</button></div>
-             <div><button>Chats</button></div>
-             <div><button>New Chat</button></div>
+        <div id="Navigation">
+    <div><button onclick="window.location.href='parametre.html'">Settings</button></div>
+    <div><button onclick="window.location.href='contacts.html'">Contacts</button></div>
+    <div><button onclick="window.location.href='conversation.html'">Chats</button></div>
+    <!-- MODIFIÉ : l'alert est remplacé par un id, le comportement est dans script.js -->
+    <div><button id="boutonNewChat">New Chat</button></div>
+
+    <!-- AJOUT : liste des chats (remplie par script.js) -->
+    <div id="listeChats"></div>
+</div>
             
-        </div>
-        <div id="Conversation" > <!--zone de Conversation-->
-            <div id="Messages">
-                 <div>contenu du message</div>
-            <div id="Envoi">
-                 <div><textarea placeholder="Ecrire un message"></textarea></div> <!-- textarea pour des entrees de plusieurs lignes-->
-                 <div><button>Envoyer</button></div></div>                        
-        </div>
-        </div> 
+<div id="Messages">
+    <!-- AJOUT : nom du chat ouvert -->
+    <h3 id="titreChat"></h3>
+
+    <div id="listeMessages">
+        <div>Bonjour, comment vas-tu ?</div>
+        <div>Je vais bien, merci !</div>
+    </div>
+
+    <div id="Envoi">
+        <div><textarea id="messageInput" placeholder="Ecrire un message"></textarea></div>
+        <div><button id="boutonEnvoyer">Envoyer</button></div>
+    </div>
+</div> 
         
-        
+        <script src="script.js"></script>
+
     </body>
 </html>
-
