@@ -148,9 +148,8 @@ async function chargerMessages() {
     for (const message of data) {
         const ligne = document.createElement("div");
 
-        const heure = new Date(message.created_at)
+  const heure = new Date(message.created_at + "Z")
     .toLocaleTimeString("fr-CA", {
-        timeZone: "America/Toronto",
         hour: "2-digit",
         minute: "2-digit",
         hour12: false
