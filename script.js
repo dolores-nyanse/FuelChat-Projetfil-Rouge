@@ -149,10 +149,12 @@ async function chargerMessages() {
         const ligne = document.createElement("div");
 
         const heure = new Date(message.created_at)
-            .toLocaleTimeString("fr-CA", {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+    .toLocaleTimeString("fr-CA", {
+        timeZone: "America/Toronto",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
 
         const auteur = message.sender_id === idUtilisateur
             ? "Moi"
