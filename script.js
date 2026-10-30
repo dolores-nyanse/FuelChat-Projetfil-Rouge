@@ -148,19 +148,33 @@ async function chargerMessages() {
     for (const message of data) {
         const ligne = document.createElement("div");
 
-        const heure = new Date(message.created_at)
-            .toLocaleTimeString("fr-CA", {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+  const heure = new Date(message.created_at + "Z")
+    .toLocaleTimeString("fr-CA", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
 
         const auteur = message.sender_id === idUtilisateur
             ? "Moi"
             : chatActif.nom;
 
-        ligne.textContent =
-            auteur + " : " + message.content + " - " + heure;
+        ligne.classList.add("message");
 
+if (message.sender_id === idUtilisateur) {
+    ligne.classList.add("message-envoye");
+} else {
+    ligne.classList.add("message-recu");
+}
+
+const contenu = document.createElement("div");
+contenu.textContent = message.content;
+
+const temps = document.createElement("small");
+temps.textContent = heure;
+
+ligne.appendChild(contenu);
+ligne.appendChild(temps);
         listeMessages.appendChild(ligne);
     }
 }

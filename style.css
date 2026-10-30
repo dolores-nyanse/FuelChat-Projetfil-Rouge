@@ -295,6 +295,7 @@ h3{ color: white;
     }
 }
 
+
 /* ===== PROFIL DANS LES PARAMÈTRES ===== */
 
 .page-parametres #informationsProfil {
@@ -320,4 +321,50 @@ h3{ color: white;
 
 .page-parametres .section-session {
     margin-top: 65px;
+
+    
+/* Zone des messages */
+#listeMessages {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
+    padding: 12px;
+    min-height: 0;
+    height: 350px;
+    overflow-y: auto;
+}
+
+/* Toutes les bulles */
+.message {
+    width: fit-content;
+    max-width: 65%;
+    padding: 6px 10px;
+    border-radius: 12px;
+    overflow-wrap: break-word;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.3;
+}
+.message-envoye {
+    align-self: flex-end;
+    background-color: #1fa8ca;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-recu {
+    align-self: flex-start;
+    background-color: #f1f1f1;
+    color: #222;
+    border-bottom-left-radius: 4px;
+}
+
+.message small {
+    display: block;
+    margin-top: 3px;
+    text-align: right;
+    font-size: 10px;
+    opacity: 0.75;
+
 }
