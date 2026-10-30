@@ -294,3 +294,47 @@ h3{ color: white;
         padding: 18px;
     }
 }
+/* Zone des messages */
+#listeMessages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    min-height: 300px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Toutes les bulles */
+.message {
+    max-width: 65%;
+    padding: 10px 15px;
+    border-radius: 16px;
+    overflow-wrap: break-word;
+    font-family: Arial, sans-serif;
+}
+
+/* Mes messages : à droite */
+.message-envoye {
+    align-self: flex-end;
+    background-color: #1fa8ca;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Messages reçus : à gauche */
+.message-recu {
+    align-self: flex-start;
+    background-color: #f1f1f1;
+    color: #222;
+    border-bottom-left-radius: 4px;
+}
+
+/* Heure sous le message */
+.message small {
+    display: block;
+    margin-top: 5px;
+    text-align: right;
+    font-size: 11px;
+    opacity: 0.75;
+}

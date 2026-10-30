@@ -159,9 +159,22 @@ async function chargerMessages() {
             ? "Moi"
             : chatActif.nom;
 
-        ligne.textContent =
-            auteur + " : " + message.content + " - " + heure;
+        ligne.classList.add("message");
 
+if (message.sender_id === idUtilisateur) {
+    ligne.classList.add("message-envoye");
+} else {
+    ligne.classList.add("message-recu");
+}
+
+const contenu = document.createElement("div");
+contenu.textContent = message.content;
+
+const temps = document.createElement("small");
+temps.textContent = heure;
+
+ligne.appendChild(contenu);
+ligne.appendChild(temps);
         listeMessages.appendChild(ligne);
     }
 }
