@@ -228,3 +228,29 @@ button { font: inherit; color: inherit; cursor: pointer; }
     .message { max-width: 80%; }
     #Envoi { margin: 0 10px 12px; }
 }
+
+/* ===== Thème clair ===== */
+html[data-theme="clair"] body { background: #eef3f9; color: #12263f; }
+html[data-theme="clair"] #Navigation { background: linear-gradient(180deg, #ffffff, #f1f6fc); border-right-color: #d5e1ee; }
+html[data-theme="clair"] .lienMenu { color: #24405f; }
+html[data-theme="clair"] .lienMenu:hover { background: rgba(10, 60, 120, 0.06); }
+html[data-theme="clair"] .lienMenu.actif { background: linear-gradient(90deg, rgba(20, 120, 220, 0.22), rgba(20, 120, 220, 0.06)); border-color: #9cc6ee; color: #0a5fb0; }
+html[data-theme="clair"] .recherche { border-color: #c5d5e6; color: #5d7390; }
+html[data-theme="clair"] .recherche input { color: #12263f; }
+html[data-theme="clair"] .itemChat:hover { background: rgba(10, 60, 120, 0.06); }
+html[data-theme="clair"] .itemChat.actif { background: rgba(20, 120, 220, 0.14); }
+html[data-theme="clair"] .heureItem { color: #6b8097; }
+html[data-theme="clair"] .apercuItem { color: #5d7390; }
+html[data-theme="clair"] .ajouterContact { color: #24405f; border-top-color: #d5e1ee; }
+html[data-theme="clair"] .pastille { border-color: #ffffff; }
+html[data-theme="clair"] #Messages { background-color: #f4f8fc; background-image: radial-gradient(rgba(60, 120, 200, 0.12) 1px, transparent 1px); }
+html[data-theme="clair"] #enteteChat { background: rgba(255, 255, 255, 0.95); border-bottom-color: #d5e1ee; }
+html[data-theme="clair"] #statutChat { color: #5d7390; }
+html[data-theme="clair"] .message-recu { background: #e3ebf5; color: #12263f; }
+html[data-theme="clair"] .message-recu .metaMessage { color: #5d7390; }
+html[data-theme="clair"] #Envoi { background: #ffffff; border-color: #8fc0ee; box-shadow: 0 0 12px rgba(20, 130, 230, 0.2); }
+html[data-theme="clair"] .barreSaisie { background: #eaf1f9; }
+html[data-theme="clair"] .boutonIcone { color: #4a6584; }
+html[data-theme="clair"] #messageInput { color: #12263f; }
+html[data-theme="clair"] #panneauEmoji { background: #ffffff; border-color: #c5d5e6; }
+html[data-theme="clair"] .etatVide { color: #6b8097; }
