@@ -294,3 +294,30 @@ h3{ color: white;
         padding: 18px;
     }
 }
+
+/* ===== PROFIL DANS LES PARAMÈTRES ===== */
+
+.page-parametres #informationsProfil {
+    background-color: #111519;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 500px;
+}
+
+.page-parametres #nomUtilisateur {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 0 8px;
+}
+
+.page-parametres #courrielUtilisateur {
+    color: #bbbbbb;
+    font-size: 15px;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.page-parametres .section-session {
+    margin-top: 65px;
+}

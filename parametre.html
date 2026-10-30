@@ -1,12 +1,62 @@
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Parametres</title>
-    </head>
-    <body>
-        <a href="Conversation.html">Conversations</a>
-        <p>Nom du contact</p>
-        <p><button><a href="Index.html">Se deconnecter</a> </button></p>
-        <p><button><a href="Index.html">Supprimer son compte</a> </button></p>
-    </body>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Paramètres - FuelChat</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="parametre.js" defer></script>
+</head>
+
+<body class="page-parametres">
+
+    <main id="parametres">
+
+        <h1>Paramètres</h1>
+
+        <!-- Informations du compte -->
+        <section>
+            <h2>Profil</h2>
+
+<div id="informationsProfil">
+    <p id="nomUtilisateur"></p>
+    <p id="courrielUtilisateur"></p>
+</div>
+
+        <!-- Apparence -->
+        <section>
+            <h2>Apparence</h2>
+
+            <label for="choixTheme">Thème :</label>
+
+            <select id="choixTheme">
+                <option value="dark">Sombre</option>
+                <option value="light">Clair</option>
+                <option value="system">Automatique</option>
+            </select>
+        </section>
+
+        <!-- Déconnexion -->
+        <section>
+            <h2>Session</h2>
+
+            <button type="button" id="boutonDeconnexion">
+                Se déconnecter
+            </button>
+        </section>
+
+        <!-- Navigation -->
+        <p>
+            <a href="conversation.html">Retour aux conversations</a>
+        </p>
+
+    </main>
+
+</body>
 </html>
