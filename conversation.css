@@ -1,0 +1,230 @@
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+    background: #050d18;
+    color: #e8f1fb;
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size: 15px;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+
+.ico {
+    width: 22px; height: 22px; flex-shrink: 0;
+    fill: none; stroke: currentColor; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #1d3b5c; border-radius: 8px; }
+
+#application { display: flex; height: 100vh; height: 100dvh; }
+
+/* ===== Barre latérale ===== */
+#Navigation {
+    width: 340px; flex-shrink: 0;
+    display: flex; flex-direction: column;
+    background: linear-gradient(180deg, #0a1a2e, #060f1c);
+    border-right: 1px solid #12304f;
+    padding: 18px 16px 12px;
+    overflow: hidden;
+}
+
+.logo { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 700; padding: 0 6px; }
+.logo .ico { width: 38px; height: 38px; color: #1aa0ff; }
+.logo b { color: #1aa0ff; font-weight: 700; }
+
+.menu { margin: 22px 0 16px; display: flex; flex-direction: column; gap: 4px; }
+
+.lienMenu {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 14px; border-radius: 10px;
+    color: #dbe8f7; text-decoration: none; font-size: 16px;
+    border: 1px solid transparent;
+}
+.lienMenu:hover { background: rgba(255, 255, 255, 0.05); }
+.lienMenu.actif {
+    background: linear-gradient(90deg, rgba(20, 120, 220, 0.55), rgba(20, 120, 220, 0.15));
+    border-color: #1b5f9e; color: #fff; font-weight: 600;
+}
+
+#boutonNewChat {
+    width: 100%; padding: 13px; border: none; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(180deg, #1496f5, #0a7ee0);
+    color: #fff; font-weight: 600; font-size: 16px;
+    box-shadow: 0 0 14px rgba(20, 150, 245, 0.35);
+}
+#boutonNewChat:hover { filter: brightness(1.1); }
+
+.recherche {
+    margin: 14px 0 10px; height: 42px; padding: 0 12px;
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid #1d3b5c; border-radius: 10px; color: #8ea3bb;
+}
+.recherche input {
+    flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+    color: #e8f1fb; font: inherit;
+}
+.recherche input::placeholder { color: #7d92aa; }
+
+#listeChats { flex: 1; overflow-y: auto; margin: 0 -8px; padding: 0 8px; }
+
+.itemChat {
+    width: 100%; display: flex; align-items: center; gap: 12px;
+    padding: 10px; margin-bottom: 2px; text-align: left;
+    background: transparent; border: none; border-radius: 12px;
+}
+.itemChat:hover { background: rgba(255, 255, 255, 0.05); }
+.itemChat.actif { background: rgba(20, 110, 200, 0.35); box-shadow: inset 3px 0 0 #1aa0ff; }
+
+.infosItem { flex: 1; min-width: 0; }
+.ligneNom { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.nomItem { font-weight: 600; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.heureItem { font-size: 13px; color: #8ea3bb; flex-shrink: 0; }
+.apercuItem { font-size: 14px; color: #9fb3c9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+
+.ajouterContact {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 8px; padding: 14px 10px;
+    border-top: 1px solid #12304f;
+    color: #dbe8f7; text-decoration: none; font-size: 16px;
+}
+.ajouterContact:hover { color: #1aa0ff; }
+
+/* ===== Avatars ===== */
+.avatar {
+    position: relative; flex-shrink: 0;
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #6a5cf0, #3a3a9c);
+}
+.avatar.petit { width: 42px; height: 42px; }
+.avatar.grand { width: 54px; height: 54px; }
+.avatar .personne { width: 62%; height: 62%; }
+.pastille {
+    position: absolute; right: 0; bottom: 0;
+    width: 13px; height: 13px; border-radius: 50%;
+    background: #22c55e; border: 2px solid #0a1a2e;
+}
+
+/* ===== Zone de conversation ===== */
+#Messages {
+    flex: 1; min-width: 0; display: flex; flex-direction: column;
+    background-color: #07111f;
+    background-image: radial-gradient(rgba(60, 120, 200, 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+}
+
+#enteteChat {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 24px; min-height: 82px;
+    background: rgba(8, 20, 36, 0.92);
+    border-bottom: 1px solid #12304f;
+}
+#titreChat { margin: 0; font-size: 22px; font-weight: 600; }
+.ligneStatut { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+#pointStatut { width: 10px; height: 10px; border-radius: 50%; display: none; }
+#pointStatut.enLigne { background: #22c55e; }
+#pointStatut.horsLigne { background: #6b7c90; }
+#statutChat { font-size: 15px; color: #aebfd3; }
+#statutChat.ecrit { color: #1aa0ff; font-style: italic; }
+
+#listeMessages {
+    flex: 1; min-height: 0; overflow-y: auto;
+    padding: 24px 28px;
+    display: flex; flex-direction: column; gap: 14px;
+}
+
+.ligneMessage { display: flex; align-items: flex-end; gap: 12px; }
+.rangeeEnvoye { justify-content: flex-end; }
+.rangeeRecu { justify-content: flex-start; }
+
+.message {
+    max-width: 62%; padding: 12px 18px; border-radius: 20px;
+    overflow-wrap: anywhere; line-height: 1.35;
+}
+.texteMessage { white-space: pre-wrap; font-size: 17px; }
+.metaMessage { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+
+.message-recu {
+    display: flex; align-items: flex-end; gap: 16px;
+    background: #1d2b3e; border-bottom-left-radius: 6px;
+}
+.message-recu .metaMessage { color: #8ea3bb; }
+
+.message-envoye {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+    background: linear-gradient(180deg, #1496f5, #0a7ee0);
+    color: #fff; border-bottom-right-radius: 6px;
+}
+.message-envoye .metaMessage { color: rgba(255, 255, 255, 0.85); }
+
+.coche { width: 17px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.etat { display: flex; opacity: 0.6; }
+.etat.vu { opacity: 1; color: #c9f1ff; }
+
+.etatVide { margin: auto; color: #7d92aa; text-align: center; padding: 20px; }
+
+/* ===== Zone de saisie ===== */
+#Envoi {
+    position: relative;
+    margin: 0 24px 22px; padding: 8px;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(8, 20, 36, 0.92);
+    border: 1px solid #1b6fb8; border-radius: 40px;
+    box-shadow: 0 0 16px rgba(20, 130, 230, 0.3);
+}
+
+.barreSaisie {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
+    background: #0f2036; border-radius: 30px; padding: 4px 14px;
+}
+
+.boutonIcone { background: none; border: none; color: #cfe0f5; padding: 6px; display: flex; }
+.boutonIcone:hover { color: #1aa0ff; }
+
+#messageInput {
+    flex: 1; min-width: 0; resize: none;
+    border: none; outline: none; background: transparent;
+    color: #e8f1fb; font: inherit; font-size: 16px;
+    line-height: 24px; padding: 9px 4px; max-height: 120px;
+}
+#messageInput::placeholder { color: #7d92aa; }
+
+#boutonEnvoyer {
+    width: 52px; height: 52px; flex-shrink: 0; border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #1aa0ff, #0a7ee0); color: #fff;
+}
+#boutonEnvoyer:hover { filter: brightness(1.1); }
+#boutonEnvoyer:disabled { opacity: 0.6; cursor: not-allowed; }
+#boutonEnvoyer .ico { width: 24px; height: 24px; }
+
+#panneauEmoji {
+    position: absolute; bottom: calc(100% + 10px); left: 10px; z-index: 5;
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;
+    padding: 10px; background: #0f2036;
+    border: 1px solid #1d3b5c; border-radius: 16px;
+}
+#panneauEmoji[hidden] { display: none; }
+#panneauEmoji button { background: none; border: none; font-size: 24px; padding: 4px; border-radius: 8px; }
+#panneauEmoji button:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* ===== Téléphone ===== */
+@media (max-width: 800px) {
+    #application { flex-direction: column; }
+    #Navigation { width: 100%; max-height: 42%; padding: 12px; border-right: none; border-bottom: 1px solid #12304f; }
+    .logo { font-size: 22px; }
+    .logo .ico { width: 28px; height: 28px; }
+    .menu { flex-direction: row; flex-wrap: wrap; margin: 10px 0; }
+    .lienMenu { padding: 8px 10px; font-size: 14px; gap: 8px; }
+    .ajouterContact { display: none; }
+    #Messages { flex: 1; min-height: 0; }
+    #enteteChat { min-height: 64px; padding: 10px 14px; }
+    #listeMessages { padding: 14px; }
+    .message { max-width: 80%; }
+    #Envoi { margin: 0 10px 12px; }
+}

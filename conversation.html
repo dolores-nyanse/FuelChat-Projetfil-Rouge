@@ -1,65 +1,87 @@
 <!doctype html>
-<html>
-    <head>
-        <title>Conversation</title>
-      <link rel="stylesheet" href="style.css?v=2">
-    </head>
-    <body>
-        <div id="Navigation">
-    <div><button style="display:flex;align-items:center;gap:10px;" onclick="window.location.href='parametre.html'">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-        Settings</button></div>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conversation</title>
+    <link rel="stylesheet" href="conversation.css">
+</head>
+<body>
+<div id="application">
 
-    <div><button style="display:flex;align-items:center;gap:10px;" onclick="window.location.href='contacts.html'">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Contacts</button></div>
+    <!-- Barre latérale -->
+    <aside id="Navigation">
+        <div class="logo">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            <span>Fuel<b>Chat</b></span>
+        </div>
 
-    <div><button style="display:flex;align-items:center;gap:10px;" onclick="window.location.href='conversation.html'">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-        Chats</button></div>
+        <nav class="menu">
+            <a class="lienMenu" href="conversation.html">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Accueil</a>
+            <a class="lienMenu actif" href="conversation.html">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                Chats</a>
+            <a class="lienMenu" href="contacts.html">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Contacts</a>
+            <a class="lienMenu" href="parametre.html">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Paramètres</a>
+        </nav>
 
-    <!-- MODIFIÉ : l'alert est remplacé par un id, le comportement est dans script.js -->
-    <div><button id="boutonNewChat" style="display:flex;align-items:center;gap:10px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-        New Chat</button></div>
+        <button id="boutonNewChat" type="button">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Nouveau chat
+        </button>
 
-    <!-- AJOUT : liste des chats (remplie par script.js) -->
-    <div id="listeChats"></div>
+        <div class="recherche">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="rechercheChat" type="text" placeholder="Rechercher une conversation…" autocomplete="off">
+        </div>
+
+        <!-- Liste des conversations (remplie par script.js) -->
+        <div id="listeChats"></div>
+
+        <a class="ajouterContact" href="contacts.html">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+            Ajouter un contact
+        </a>
+    </aside>
+
+    <!-- Zone de conversation -->
+    <main id="Messages">
+        <header id="enteteChat">
+            <div class="avatar grand" id="avatarEntete"></div>
+            <div>
+                <h3 id="titreChat">Choisissez une conversation</h3>
+                <div class="ligneStatut">
+                    <span id="pointStatut"></span>
+                    <small id="statutChat"></small>
+                </div>
+            </div>
+        </header>
+
+        <div id="listeMessages"></div>
+
+        <div id="Envoi">
+            <div id="panneauEmoji" hidden></div>
+            <div class="barreSaisie">
+                <button id="boutonEmoji" class="boutonIcone" type="button" aria-label="Emojis">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                </button>
+                <textarea id="messageInput" rows="1" placeholder="Écrire un message…"></textarea>
+            </div>
+            <button id="boutonEnvoyer" type="button" aria-label="Envoyer">
+                <svg class="ico" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </button>
+        </div>
+    </main>
 </div>
-            
-<div id="Messages">
-    <!-- AJOUT : nom du chat ouvert -->
-   <div id="enteteChat">
-    <div class="avatarChat">👤</div>
 
-    <div>
-        <h3 id="titreChat"></h3>
-        <small id="statutChat"></small>
-    </div>
-</div>
-
-    <div id="listeMessages">
-        <div>Bonjour, comment vas-tu ?</div>
-        <div>Je vais bien, merci !</div>
-    </div>
-
-    <div id="Envoi">
-        <div><textarea id="messageInput" placeholder="Ecrire un message"></textarea></div>
-        <div><button id="boutonEnvoyer">Envoyer</button></div>
-    </div>
-</div> 
-        
-        <script>
-    // Affiche toute erreur JavaScript dans une fenêtre
-    window.addEventListener("error", function (e) {
-        alert("Erreur JavaScript : " + e.message + "\nLigne : " + e.lineno + "\nFichier : " + e.filename);
-    });
-    window.addEventListener("unhandledrejection", function (e) {
-        alert("Erreur : " + (e.reason && e.reason.message ? e.reason.message : e.reason));
-    });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js?v=3"></script>
-<script src="script.js?v=3"></script>
-    </body>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+</body>
 </html>
