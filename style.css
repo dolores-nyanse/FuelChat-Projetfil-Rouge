@@ -60,7 +60,7 @@ h3{ color: white;
     font-size: 18px;
 }
 
-/* ===== AJOUT : liste des chats ===== */
+/* AJOUT : liste des chats*/
 #listeChats {
     margin-top: 20px;
     padding-top: 10px;
@@ -82,7 +82,7 @@ h3{ color: white;
 }
 
 
-/* ===== PAGE D'ACCUEIL FUELCHAT ===== */
+/* PAGE D'ACCUEIL FUELCHAT */
 
 .page-accueil {
     min-height: 100vh;
@@ -189,7 +189,7 @@ h3{ color: white;
 }
 
 
-/* ===== PAGE CONTACTS FUELCHAT ===== */
+/* PAGE CONTACTS FUELCHAT */
 
 .page-contacts {
     min-height: 100vh;
@@ -294,6 +294,35 @@ h3{ color: white;
         padding: 18px;
     }
 }
+
+
+/*PROFIL DANS LES PARAMÈTRES*/
+
+.page-parametres #informationsProfil {
+    background-color: #111519;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 500px;
+}
+
+.page-parametres #nomUtilisateur {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 0 8px;
+}
+
+.page-parametres #courrielUtilisateur {
+    color: #bbbbbb;
+    font-size: 15px;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.page-parametres .section-session {
+    margin-top: 65px;
+}
+
 /* Zone des messages */
 #listeMessages {
     display: flex;
@@ -337,4 +366,5 @@ h3{ color: white;
     text-align: right;
     font-size: 10px;
     opacity: 0.75;
+
 }
