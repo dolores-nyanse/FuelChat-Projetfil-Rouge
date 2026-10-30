@@ -34,7 +34,10 @@ h3{ color: white;
     border: none;
 }
 #Envoi {
+    #Envoi {
     margin-top: 20px;
+    padding-left: 20px;
+}
 }
 
 #Envoi textarea {
@@ -56,10 +59,10 @@ h3{ color: white;
     font-size: 16px;
 }
 #Messages {
+    margin-left: 20%;
     padding: 20px;
     font-size: 18px;
 }
-
 /* AJOUT : liste des chats*/
 #listeChats {
     margin-top: 20px;
@@ -366,4 +369,91 @@ h3{ color: white;
     font-size: 10px;
     opacity: 0.75;
 
+}
+
+
+
+
+/* DESIGN DU MENU DE GAUCHE FUELCHAT */
+
+#Navigation {
+    background-color: #e9eef3;
+    padding: 20px 12px;
+    box-sizing: border-box;
+}
+
+#Navigation > div > button {
+    display: block;
+    width: 100%;
+    background-color: #f8fafc;
+    color: #24344a;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#Navigation > div > button:hover {
+    background-color: #dceeff;
+}
+
+#Navigation > div:nth-of-type(3) > button {
+    background-color: #dceeff;
+    color: #2469be;
+    font-weight: bold;
+}
+
+#Navigation #listeChats {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #d4dce5;
+}
+
+#Navigation #listeChats button {
+    width: 100%;
+    background-color: #dceeff;
+    color: #24344a;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: left;
+}
+
+#Navigation #listeChats button.chatActif {
+    background-color: #bddfff;
+    color: #1757a5;
+}
+/* Fond noir du menu FuelChat */
+
+#Navigation {
+    background-color: #222222;
+}
+/* Décaler légèrement les messages reçus vers la droite */
+
+#listeMessages .message-recu {
+    margin-left: 80px;
+}
+/* Séparation verticale entre le menu et la conversation */
+#Navigation {
+    border-right: 2px solid #888888;
+}
+
+/* Aligner l'avatar et le nom du contact */
+#enteteChat {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+/* Positionner le nom à côté de l'avatar */
+#enteteChat #titreChat {
+    margin: 0;
+    text-align: left;
+}
+/* Espacer la zone d'écriture de la bordure gauche */
+#Envoi {
+    margin-left: 15px;
 }
