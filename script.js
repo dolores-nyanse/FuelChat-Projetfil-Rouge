@@ -1,57 +1,71 @@
+
 const messageInput = document.getElementById("messageInput");
 const boutonEnvoyer = document.getElementById("boutonEnvoyer");
 const listeMessages = document.getElementById("listeMessages");
-
-// AJOUT : éléments pour les chats
 const boutonNewChat = document.getElementById("boutonNewChat");
 const listeChats = document.getElementById("listeChats");
 const titreChat = document.getElementById("titreChat");
 
-// AJOUT : récupérer les chats sauvegardés
-// Structure : [{ id, nom, messages: [{ texte, heure }] }]
-let chats = JSON.parse(localStorage.getItem("chats")) || [];
+let utilisateurActuel = null;
+let chats = [];
+let chatActif = null;
 
-// AJOUT : si aucun chat, en créer un premier
-// (on y récupère les anciens messages sauvegardés avec l'ancienne version)
-if (chats.length === 0) {
-    const anciensMessages = JSON.parse(localStorage.getItem("messages")) || [];
-    chats.push({ id: Date.now().toString(), nom: "Chat 1", messages: anciensMessages });
-}
+// Vérifier la connexion de l'utilisateur
+async function initialiserConversation() {
+    const { data, error } = await supabaseClient.auth.getUser();
 
-// AJOUT : chat actuellement ouvert
-let chatActif = chats.find((chat) => chat.id === localStorage.getItem("chatActifId")) || chats[chats.length - 1];
-
-// Récupérer les messages sauvegardés (ceux du chat ouvert)
-let messages = chatActif.messages;
-
-// AJOUT : tout sauvegarder
-function sauvegarder() {
-    localStorage.setItem("chats", JSON.stringify(chats));
-    localStorage.setItem("chatActifId", chatActif.id);
-}
-
-// Afficher les messages sauvegardés
-function afficherMessages() {
-    listeMessages.innerHTML = "";
-    titreChat.textContent = chatActif.nom;
-
-    for (const message of messages) {
-        const ancienMessage = document.createElement("div");
-        ancienMessage.textContent = message.texte + " - " + message.heure;
-        listeMessages.appendChild(ancienMessage);
+    if (error || !data.user) {
+        alert("Veuillez vous connecter.");
+        window.location.href = "index.html";
+        return;
     }
+
+    utilisateurActuel = data.user;
+
+    await chargerContacts();
+    await chargerMessages();
+
+    // Vérifier les nouveaux messages toutes les 3 secondes
+    setInterval(chargerMessages, 3000);
 }
 
-// AJOUT : afficher la liste des chats (chaque chat est un bouton)
+// Récupérer les contacts depuis Supabase
+async function chargerContacts() {
+    const { data, error } = await supabaseClient
+        .from("contacts")
+        .select("contact_id, profiles!contacts_contact_id_fkey(username)")
+        .eq("user_id", utilisateurActuel.id);
+
+    if (error) {
+        console.error("Erreur contacts :", error);
+        alert("Impossible de charger les contacts.");
+        return;
+    }
+
+    chats = data.map(contact => ({
+        id: contact.contact_id,
+        nom: contact.profiles?.username || "Utilisateur"
+    }));
+
+    // Garder le chat précédemment ouvert
+    const ancienId = localStorage.getItem("contactActifId");
+    chatActif = chats.find(chat => chat.id === ancienId) || null;
+
+    afficherListeChats();
+}
+
+// Afficher les contacts dans la liste des chats
 function afficherListeChats() {
     listeChats.innerHTML = "";
 
     for (const chat of chats) {
         const bouton = document.createElement("button");
         bouton.textContent = chat.nom;
-        if (chat.id === chatActif.id) {
+
+        if (chatActif && chat.id === chatActif.id) {
             bouton.classList.add("chatActif");
         }
+
         bouton.addEventListener("click", () => ouvrirChat(chat.id));
 
         const conteneur = document.createElement("div");
@@ -60,55 +74,131 @@ function afficherListeChats() {
     }
 }
 
-// AJOUT : ouvrir un chat de la liste
-function ouvrirChat(id) {
-    chatActif = chats.find((chat) => chat.id === id);
-    messages = chatActif.messages;
-    sauvegarder();
+// Ouvrir une conversation
+async function ouvrirChat(id) {
+    chatActif = chats.find(chat => chat.id === id);
+
+    if (!chatActif) {
+        return;
+    }
+
+    localStorage.setItem("contactActifId", chatActif.id);
+
+    titreChat.textContent = chatActif.nom;
     afficherListeChats();
-    afficherMessages();
+    await chargerMessages();
 }
 
-// AJOUT : New Chat
-boutonNewChat.addEventListener("click", () => {
-    const nomParDefaut = "Chat " + (chats.length + 1);
-    const nom = prompt("Nom du nouveau chat :", nomParDefaut);
+// Bouton New Chat : choisir un contact
+boutonNewChat.addEventListener("click", async function() {
+    await chargerContacts();
 
-    if (nom === null) {
-        return; // annulé
+    if (chats.length === 0) {
+        alert("Ajoutez d'abord un contact dans la page Contacts.");
+        return;
     }
 
-    const nouveauChat = { id: Date.now().toString(), nom: nom.trim() || nomParDefaut, messages: [] };
-    chats.push(nouveauChat);
-    ouvrirChat(nouveauChat.id);
+    let choix = "Choisissez un contact :\n";
+
+    for (let i = 0; i < chats.length; i++) {
+        choix += (i + 1) + ". " + chats[i].nom + "\n";
+    }
+
+    const reponse = prompt(choix);
+
+    if (reponse === null) {
+        return;
+    }
+
+    const numero = Number(reponse);
+
+    if (!Number.isInteger(numero) ||
+        numero < 1 || numero > chats.length) {
+        alert("Choix invalide.");
+        return;
+    }
+
+    await ouvrirChat(chats[numero - 1].id);
 });
 
-// Envoyer un message
-boutonEnvoyer.addEventListener("click", () => {
-    const message = messageInput.value;
+// Charger les messages envoyés ET reçus
+async function chargerMessages() {
+    if (!utilisateurActuel || !chatActif) {
+        return;
+    }
 
-    if (message.trim() !== "") {
+    const idUtilisateur = utilisateurActuel.id;
+    const idContact = chatActif.id;
 
-        // Récupérer l'heure actuelle
-        const heure = new Date().toLocaleTimeString("fr-CA", {
-            hour: "2-digit",
-            minute: "2-digit"
+    const { data, error } = await supabaseClient
+        .from("Messages")
+        .select("id, sender_id, receiver_id, content, created_at")
+        .or(
+            `and(sender_id.eq.${idUtilisateur},receiver_id.eq.${idContact}),and(sender_id.eq.${idContact},receiver_id.eq.${idUtilisateur})`
+        )
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        console.error("Erreur messages :", error);
+        return;
+    }
+
+    listeMessages.innerHTML = "";
+
+    for (const message of data) {
+        const ligne = document.createElement("div");
+
+        const heure = new Date(message.created_at)
+            .toLocaleTimeString("fr-CA", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+        const auteur = message.sender_id === idUtilisateur
+            ? "Moi"
+            : chatActif.nom;
+
+        ligne.textContent =
+            auteur + " : " + message.content + " - " + heure;
+
+        listeMessages.appendChild(ligne);
+    }
+}
+
+// Envoyer un message à un vrai contact
+boutonEnvoyer.addEventListener("click", async function() {
+    const texte = messageInput.value.trim();
+
+    if (texte === "") {
+        return;
+    }
+
+    if (!chatActif) {
+        alert("Choisissez d'abord un contact avec New Chat.");
+        return;
+    }
+
+    boutonEnvoyer.disabled = true;
+
+    const { error } = await supabaseClient
+        .from("Messages")
+        .insert({
+            sender_id: utilisateurActuel.id,
+            receiver_id: chatActif.id,
+            content: texte
         });
 
-        const nouveauMessage = document.createElement("div");
-        nouveauMessage.textContent = message + " - " + heure;
-        listeMessages.appendChild(nouveauMessage);
+    boutonEnvoyer.disabled = false;
 
-        // Enregistrer le texte et l'heure (dans le chat ouvert)
-        messages.push({ texte: message, heure: heure });
-        sauvegarder();
-
-        messageInput.value = "";
+    if (error) {
+        console.error("Erreur envoi :", error);
+        alert("Message non envoyé : " + error.message);
+        return;
     }
+
+    messageInput.value = "";
+    await chargerMessages();
 });
 
-// AJOUT : affichage au chargement de la page
-sauvegarder();
-afficherListeChats();
-afficherMessages();
-
+// Démarrer la page Conversation
+initialiserConversation();
