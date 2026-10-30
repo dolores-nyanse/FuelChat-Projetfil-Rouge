@@ -1,8 +1,14 @@
-body{ background-color: #2b1e01;
-      color: rgb(249, 246, 243);
-      font-size: large;}
-h1{ color: rgb(30, 171, 210);
-    text-align: left;}
+body {
+    background-color: #222222;
+    color: #F5F5F5;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    margin: 0;
+}
+h1 {
+    color: #F4772C;
+    text-align: center;
+}
 h3{ color: white;
     text-align: center;
     font-size: 6;
@@ -75,3 +81,216 @@ h3{ color: white;
     background-color: rgb(30, 171, 210);
 }
 
+
+/* ===== PAGE D'ACCUEIL FUELCHAT ===== */
+
+.page-accueil {
+    min-height: 100vh;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+
+.page-accueil h1 {
+    font-size: 48px;
+    margin: 20px 0;
+}
+
+.page-accueil h3 {
+    font-size: 24px;
+    text-align: center;
+    max-width: 650px;
+    margin: 20px auto 35px;
+    line-height: 1.4;
+}
+
+/* Formulaire de connexion et d'inscription */
+.page-accueil form {
+    background-color: #111519;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    border: 1px solid #383838;
+}
+
+/* Espacement des champs */
+.page-accueil form p {
+    margin: 0 0 20px;
+}
+
+/* Libellés */
+.page-accueil form label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+/* Champs de saisie */
+.page-accueil input[type="text"],
+.page-accueil input[type="email"],
+.page-accueil input[type="password"] {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #222222;
+}
+
+/* Boutons */
+.page-accueil button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.page-accueil #connexion {
+    background-color: #F4772C;
+    color: #111519;
+    font-weight: bold;
+}
+
+.page-accueil #inscription {
+    background-color: #343A40;
+    color: white;
+    border: 1px solid #666;
+}
+
+.page-accueil button:hover {
+    opacity: 0.85;
+}
+
+/* Lien mot de passe oublié */
+.page-accueil a {
+    color: #F4772C;
+    font-size: 14px;
+}
+
+/* Adaptation aux téléphones */
+@media (max-width: 600px) {
+    .page-accueil h1 {
+        font-size: 36px;
+    }
+
+    .page-accueil h3 {
+        font-size: 19px;
+    }
+
+    .page-accueil form {
+        padding: 20px;
+    }
+}
+
+
+/* ===== PAGE CONTACTS FUELCHAT ===== */
+
+.page-contacts {
+    min-height: 100vh;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+
+.page-contacts #contacts {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.page-contacts h1 {
+    color: #F4772C;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-contacts h2 {
+    font-size: 22px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+/* Zone de recherche */
+.page-contacts #recherche {
+    background-color: #111519;
+    border: 1px solid #383838;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.page-contacts #recherche label {
+    display: block;
+    margin-bottom: 12px;
+}
+
+.page-contacts #recherche input {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #555;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+/* Boutons de recherche et d'ajout */
+.page-contacts button {
+    background-color: #F4772C;
+    color: #111519;
+    border: none;
+    border-radius: 6px;
+    padding: 11px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.page-contacts button:hover {
+    opacity: 0.85;
+}
+
+/* Résultats et contacts enregistrés */
+.page-contacts #resultatsRecherche,
+.page-contacts #listecontacts {
+    background-color: #111519;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 40px;
+}
+
+.page-contacts #resultatsRecherche p,
+.page-contacts #listecontacts p {
+    padding: 10px 0;
+    margin: 0;
+}
+
+/* Lien vers les conversations */
+.page-contacts a {
+    color: #F4772C;
+    font-weight: bold;
+}
+
+.page-contacts #contacts > p {
+    margin-top: 25px;
+}
+
+/* Adaptation aux téléphones */
+@media (max-width: 600px) {
+    .page-contacts {
+        padding: 20px 12px;
+    }
+
+    .page-contacts h1 {
+        font-size: 29px;
+    }
+
+    .page-contacts #recherche {
+        padding: 18px;
+    }
+}
