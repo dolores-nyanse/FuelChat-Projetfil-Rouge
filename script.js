@@ -4,22 +4,18 @@ const listeMessages = document.getElementById("listeMessages");
 const boutonNewChat = document.getElementById("boutonNewChat");
 const listeChats = document.getElementById("listeChats");
 const titreChat = document.getElementById("titreChat");
+const statutChat = document.getElementById("statutChat");
 
 let utilisateurActuel = null;
 let chats = [];
 let chatActif = null;
 
-// ===== Variables pour le statut (en ligne / en train d'écrire) =====
+// Variables pour le statut (en ligne / en train d'écrire)
 let canalPresence = null;
 let utilisateursEnLigne = new Set();
 let contactEcrit = false;
 let minuterieEcriture = null;
 let derniereEmissionEcriture = 0;
-
-// Petit texte sous le nom du chat (créé ici, pas besoin de toucher au HTML)
-const statutChat = document.createElement("small");
-statutChat.id = "statutChat";
-titreChat.insertAdjacentElement("afterend", statutChat);
 
 // ===== Démarrage de la page =====
 async function initialiserConversation() {
@@ -35,7 +31,6 @@ async function initialiserConversation() {
 
     await chargerContacts();
 
-    // Afficher le nom du chat qui était ouvert
     if (chatActif) {
         titreChat.textContent = chatActif.nom;
     }
@@ -134,8 +129,7 @@ boutonNewChat.addEventListener("click", async function() {
 
     const numero = Number(reponse);
 
-    if (!Number.isInteger(numero) ||
-        numero < 1 || numero > chats.length) {
+    if (!Number.isInteger(numero) || numero < 1 || numero > chats.length) {
         alert("Choix invalide.");
         return;
     }
@@ -156,7 +150,7 @@ async function chargerMessages() {
 
     const { data, error } = await supabaseClient
         .from("Messages")
-        .select("id, sender_id, receiver_id, content, created_at")
+        .select("*")
         .or(
             `and(sender_id.eq.${idUtilisateur},receiver_id.eq.${idContact}),and(sender_id.eq.${idContact},receiver_id.eq.${idUtilisateur})`
         )
@@ -165,6 +159,17 @@ async function chargerMessages() {
     if (error) {
         console.error("Erreur messages :", error);
         return;
+    }
+
+    // Marquer comme "vus" les messages reçus (si la page est visible)
+    const nonLus = data.filter(m => m.receiver_id === idUtilisateur && !m.lu);
+    if (nonLus.length > 0 && document.visibilityState === "visible") {
+        await supabaseClient
+            .from("Messages")
+            .update({ lu: true })
+            .eq("receiver_id", idUtilisateur)
+            .eq("sender_id", idContact)
+            .eq("lu", false);
     }
 
     listeMessages.innerHTML = "";
@@ -181,7 +186,9 @@ async function chargerMessages() {
 
         ligne.classList.add("message");
 
-        if (message.sender_id === idUtilisateur) {
+        const estEnvoye = message.sender_id === idUtilisateur;
+
+        if (estEnvoye) {
             ligne.classList.add("message-envoye");
         } else {
             ligne.classList.add("message-recu");
@@ -193,6 +200,19 @@ async function chargerMessages() {
         const temps = document.createElement("small");
         temps.textContent = heure;
 
+        // Sur mes messages : "✓ Envoyé" ou "✓✓ Vu"
+        if (estEnvoye) {
+            const etat = document.createElement("span");
+            if (message.lu) {
+                etat.textContent = " ✓✓ Vu";
+                etat.style.color = "#ffe566";
+                etat.style.fontWeight = "bold";
+            } else {
+                etat.textContent = " ✓ Envoyé";
+            }
+            temps.appendChild(etat);
+        }
+
         ligne.appendChild(contenu);
         ligne.appendChild(temps);
         listeMessages.appendChild(ligne);
@@ -201,45 +221,54 @@ async function chargerMessages() {
 
 // Envoyer un message
 boutonEnvoyer.addEventListener("click", async function() {
-    const texte = messageInput.value.trim();
+    try {
+        const texte = messageInput.value.trim();
 
-    if (texte === "") {
-        return;
+        if (texte === "") {
+            return;
+        }
+
+        if (!utilisateurActuel) {
+            alert("Utilisateur non connecté. Recharge la page.");
+            return;
+        }
+
+        if (!chatActif) {
+            alert("Choisissez d'abord un contact avec New Chat.");
+            return;
+        }
+
+        boutonEnvoyer.disabled = true;
+
+        const { error } = await supabaseClient
+            .from("Messages")
+            .insert({
+                sender_id: utilisateurActuel.id,
+                receiver_id: chatActif.id,
+                content: texte
+            });
+
+        boutonEnvoyer.disabled = false;
+
+        if (error) {
+            alert("Message non envoyé : " + error.message);
+            return;
+        }
+
+        messageInput.value = "";
+
+        // J'arrête "en train d'écrire"
+        derniereEmissionEcriture = 0;
+        signalerEcriture(false);
+
+        await chargerMessages();
+    } catch (erreur) {
+        boutonEnvoyer.disabled = false;
+        alert("Problème à l'envoi : " + erreur.message);
     }
-
-    if (!chatActif) {
-        alert("Choisissez d'abord un contact avec New Chat.");
-        return;
-    }
-
-    boutonEnvoyer.disabled = true;
-
-    const { error } = await supabaseClient
-        .from("Messages")
-        .insert({
-            sender_id: utilisateurActuel.id,
-            receiver_id: chatActif.id,
-            content: texte
-        });
-
-    boutonEnvoyer.disabled = false;
-
-    if (error) {
-        console.error("Erreur envoi :", error);
-        alert("Message non envoyé : " + error.message);
-        return;
-    }
-
-    messageInput.value = "";
-
-    // J'arrête "en train d'écrire"
-    derniereEmissionEcriture = 0;
-    signalerEcriture(false);
-
-    await chargerMessages();
 });
 
-// ===== En ligne / Hors connexion / En train d'écrire =====
+// ===== En ligne / Hors-ligne / En train d'écrire =====
 
 // Afficher le statut du contact ouvert
 function afficherStatut() {
@@ -255,11 +284,9 @@ function afficherStatut() {
         statutChat.textContent = "● En ligne";
         statutChat.style.color = "#4cd964";
     } else {
-        statutChat.textContent = "● Hors connexion";
+        statutChat.textContent = "● Hors-ligne";
         statutChat.style.color = "#999";
     }
-    statutChat.style.display = "block";
-    statutChat.style.textAlign = "center";
 }
 
 // Se connecter au canal de présence
@@ -268,15 +295,24 @@ function demarrerPresence() {
         config: { presence: { key: utilisateurActuel.id } }
     });
 
-    // Quelqu'un arrive ou part : on met à jour la liste des gens en ligne
+    // Quelqu'un arrive ou part
     canalPresence.on("presence", { event: "sync" }, () => {
-        utilisateursEnLigne = new Set(Object.keys(canalPresence.presenceState()));
+        const etat = canalPresence.presenceState();
+        utilisateursEnLigne = new Set();
+
+        for (const cle in etat) {
+            utilisateursEnLigne.add(cle);
+            for (const presence of etat[cle]) {
+                if (presence.user_id) {
+                    utilisateursEnLigne.add(presence.user_id);
+                }
+            }
+        }
         afficherStatut();
     });
 
     // Quelqu'un est en train d'écrire (ou arrête)
     canalPresence.on("broadcast", { event: "ecriture" }, ({ payload }) => {
-        // On ne réagit que si ça vient du contact ouvert et que c'est pour moi
         if (!chatActif || payload.de !== chatActif.id || payload.pour !== utilisateurActuel.id) {
             return;
         }
@@ -284,7 +320,7 @@ function demarrerPresence() {
         contactEcrit = payload.ecrit;
         afficherStatut();
 
-        // Sécurité : si on ne reçoit plus rien pendant 3 s, on enlève "écrit…"
+        // Sécurité : sans nouveau signal pendant 3 s, on enlève "écrit…"
         clearTimeout(minuterieEcriture);
         if (payload.ecrit) {
             minuterieEcriture = setTimeout(() => {
@@ -296,7 +332,7 @@ function demarrerPresence() {
 
     canalPresence.subscribe(async (statut) => {
         if (statut === "SUBSCRIBED") {
-            await canalPresence.track({ en_ligne: true });
+            await canalPresence.track({ user_id: utilisateurActuel.id });
         }
     });
 }
