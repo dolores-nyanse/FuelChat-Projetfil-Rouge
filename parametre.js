@@ -1,73 +1,98 @@
-
-/* ===== PARAMÈTRES FUELCHAT ===== */
-
-// Connexion à Supabase
-const supabaseUrl = "https://zmgbizurbgqfkxpeknkx.supabase.co";
-
-// Reprendre exactement la clé publique de auth.js
-const supabaseKey = "sb_publishable_tIPrnyzU-b_Pocl5x8mo0w_ZHdjEsX0";
-
-const supabaseClient = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
-
-// Récupérer les éléments HTML
 const nomUtilisateur = document.getElementById("nomUtilisateur");
-const courrielUtilisateur = document.getElementById("courrielUtilisateur");
+const emailUtilisateur = document.getElementById("emailUtilisateur");
 const boutonDeconnexion = document.getElementById("boutonDeconnexion");
+const themeSombre = document.getElementById("themeSombre");
+const themeClair = document.getElementById("themeClair");
 
-// Vérifier la connexion et afficher le compte
-async function chargerParametres() {
+// ===== Thème (sombre / clair) =====
+function appliquerTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("theme", theme);
+    themeSombre.classList.toggle("choisi", theme === "sombre");
+    themeClair.classList.toggle("choisi", theme === "clair");
+}
 
+themeSombre.addEventListener("click", () => appliquerTheme("sombre"));
+themeClair.addEventListener("click", () => appliquerTheme("clair"));
+
+appliquerTheme(localStorage.getItem("theme") || "sombre");
+
+// ===== Notifications =====
+const notificationVisuelle = document.getElementById("notificationVisuelle");
+const notificationSonore = document.getElementById("notificationSonore");
+
+if (notificationVisuelle) {
+    notificationVisuelle.checked =
+        localStorage.getItem("notificationVisuelle") === "true";
+
+    notificationVisuelle.addEventListener("change", () => {
+        localStorage.setItem(
+            "notificationVisuelle",
+            notificationVisuelle.checked
+        );
+    });
+}
+
+if (notificationSonore) {
+    notificationSonore.checked =
+        localStorage.getItem("notificationSonore") === "true";
+
+    notificationSonore.addEventListener("change", () => {
+        localStorage.setItem(
+            "notificationSonore",
+            notificationSonore.checked
+        );
+    });
+}
+
+// ===== Profil =====
+async function chargerProfil() {
     const { data, error } = await supabaseClient.auth.getUser();
 
     if (error || !data.user) {
-        window.location.replace("index.html");
+        window.location.href = "index.html";
         return;
     }
 
     const utilisateur = data.user;
+    emailUtilisateur.textContent = utilisateur.email;
 
-    // Afficher le courriel
-    courrielUtilisateur.textContent = utilisateur.email;
+    // Nom d'utilisateur : table "profiles", sinon une valeur de secours
+    let nom = (utilisateur.user_metadata &&
+        utilisateur.user_metadata.username) ||
+        utilisateur.email.split("@")[0];
 
-    // Récupérer le nom d'utilisateur enregistré
-    const { data: profil, error: erreurProfil } =
-        await supabaseClient
+    try {
+        const { data: profil } = await supabaseClient
             .from("profiles")
             .select("username")
             .eq("id", utilisateur.id)
             .maybeSingle();
 
-    if (erreurProfil) {
-        console.error("Erreur de lecture du profil :", erreurProfil);
-        nomUtilisateur.textContent = "Indisponible";
-    } else {
-        nomUtilisateur.textContent =
-            profil?.username || "Non défini";
+        if (profil && profil.username) {
+            nom = profil.username;
+        }
+    } catch (erreur) {
+        console.error("Profil :", erreur);
     }
+
+    nomUtilisateur.textContent = nom;
 }
 
-// Se déconnecter réellement de Supabase
-async function deconnecter() {
+chargerProfil();
 
+// ===== Se déconnecter =====
+boutonDeconnexion.addEventListener("click", async () => {
     boutonDeconnexion.disabled = true;
 
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
-        console.error("Erreur de déconnexion :", error);
-        alert("Impossible de se déconnecter.");
+        alert("Impossible de se déconnecter : " + error.message);
         boutonDeconnexion.disabled = false;
         return;
     }
 
-    window.location.replace("index.html");
-}
-
-// Activer le bouton de déconnexion
-boutonDeconnexion.addEventListener("click", deconnecter);
-
-// Démarrer la page
-chargerParametres();
+    localStorage.removeItem("contactActifId");
+    window.location.href = "index.html";
+});

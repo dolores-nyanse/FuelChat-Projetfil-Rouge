@@ -1,10 +1,14 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Conversation</title>
-    <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || "sombre";</script>
+    <script>
+        document.documentElement.dataset.theme =
+            localStorage.getItem("theme") || "sombre";
+    </script>
     <link rel="stylesheet" href="conversation.css">
 </head>
 <body>
@@ -13,40 +17,74 @@
     <!-- Barre latérale -->
     <aside id="Navigation">
         <div class="logo">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+            </svg>
             <span>Fuel<b>Chat</b></span>
         </div>
 
         <nav class="menu">
             <a class="lienMenu" href="conversation.html">
-                <svg class="ico" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                Accueil</a>
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Accueil
+            </a>
+
             <a class="lienMenu actif" href="conversation.html">
-                <svg class="ico" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-                Chats</a>
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+                </svg>
+                Chats
+            </a>
+
             <a class="lienMenu" href="contacts.html">
-                <svg class="ico" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                Contacts</a>
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Contacts
+            </a>
+
             <a class="lienMenu" href="parametre.html">
-                <svg class="ico" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                Paramètres</a>
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Paramètres
+            </a>
         </nav>
 
         <button id="boutonNewChat" type="button">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+                <path d="M5 12h14"/>
+                <path d="M12 5v14"/>
+            </svg>
             Nouveau chat
         </button>
 
         <div class="recherche">
-            <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input id="rechercheChat" type="text" placeholder="Rechercher une conversation…" autocomplete="off">
+            <svg class="ico" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input id="rechercheChat" type="text"
+                   placeholder="Rechercher une conversation…"
+                   autocomplete="off">
         </div>
 
-        <!-- Liste des conversations (remplie par script.js) -->
         <div id="listeChats"></div>
 
         <a class="ajouterContact" href="contacts.html">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <line x1="19" x2="19" y1="8" y2="14"/>
+                <line x1="22" x2="16" y1="11" y2="11"/>
+            </svg>
             Ajouter un contact
         </a>
     </aside>
@@ -66,16 +104,57 @@
 
         <div id="listeMessages"></div>
 
+        <!-- Zone d'envoi -->
         <div id="Envoi">
+
             <div id="panneauEmoji" hidden></div>
-            <div class="barreSaisie">
-                <button id="boutonEmoji" class="boutonIcone" type="button" aria-label="Emojis">
-                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+
+            <!-- Aperçu du fichier sélectionné -->
+            <div id="apercuFichier" hidden>
+                <span id="nomFichier"></span>
+                <button id="annulerFichier" type="button"
+                        aria-label="Annuler le fichier">
+                    ✕
                 </button>
-                <textarea id="messageInput" rows="1" placeholder="Écrire un message…"></textarea>
             </div>
-            <button id="boutonEnvoyer" type="button" aria-label="Envoyer">
-                <svg class="ico" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+
+            <div class="barreSaisie">
+
+                <!-- Bouton emoji -->
+                <button id="boutonEmoji" class="boutonIcone"
+                        type="button" aria-label="Emojis">
+                    <svg class="ico" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                        <line x1="9" x2="9.01" y1="9" y2="9"/>
+                        <line x1="15" x2="15.01" y1="9" y2="9"/>
+                    </svg>
+                </button>
+
+                <!-- Nouveau bouton pièce jointe -->
+                <button id="boutonFichier" class="boutonIcone"
+                        type="button" aria-label="Joindre un fichier"
+                        title="Envoyer une photo ou un document">
+                    <svg class="ico" viewBox="0 0 24 24">
+                        <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.82-2.83l8.49-8.48"/>
+                    </svg>
+                </button>
+
+                <!-- Sélection de photos et documents -->
+                <input id="fichierInput"
+                       type="file"
+                       accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx,image/jpeg,image/png,image/webp,image/gif,application/pdf">
+
+                <textarea id="messageInput" rows="1"
+                          placeholder="Écrire un message…"></textarea>
+            </div>
+
+            <button id="boutonEnvoyer" type="button"
+                    aria-label="Envoyer">
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="m22 2-7 20-4-9-9-4Z"/>
+                    <path d="M22 2 11 13"/>
+                </svg>
             </button>
         </div>
     </main>

@@ -1,3 +1,4 @@
+
 * { box-sizing: border-box; }
 
 html, body { height: 100%; margin: 0; }
@@ -254,3 +255,130 @@ html[data-theme="clair"] .boutonIcone { color: #4a6584; }
 html[data-theme="clair"] #messageInput { color: #12263f; }
 html[data-theme="clair"] #panneauEmoji { background: #ffffff; border-color: #c5d5e6; }
 html[data-theme="clair"] .etatVide { color: #6b8097; }
+
+/* ===== Pièces jointes ===== */
+
+/* Le champ de sélection est caché.
+   Le bouton trombone servira à l'ouvrir avec JavaScript. */
+#fichierInput {
+    display: none;
+}
+
+#boutonFichier {
+    color: #45b5ff;
+    align-items: center;
+    justify-content: center;
+}
+
+#boutonFichier:hover {
+    color: #8bd7ff;
+}
+
+/* Aperçu avant l'envoi */
+#apercuFichier {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 12px;
+    max-width: calc(100% - 24px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #17334e;
+    color: #e8f1fb;
+    border: 1px solid #27b8ff;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    z-index: 6;
+}
+
+#apercuFichier[hidden] {
+    display: none;
+}
+
+#nomFichier {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+#annulerFichier {
+    border: none;
+    background: #294b68;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+#annulerFichier:hover {
+    background: #b83242;
+}
+
+/* Images reçues et envoyées */
+.imageMessage {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* Documents reçus et envoyés */
+.documentMessage {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    color: inherit;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.documentMessage:hover {
+    background: rgba(255, 255, 255, 0.2);
+    text-decoration: underline;
+}
+
+/* Thème clair pour les pièces jointes */
+html[data-theme="clair"] #boutonFichier {
+    color: #0878ce;
+}
+
+html[data-theme="clair"] #apercuFichier {
+    background: #ffffff;
+    color: #12263f;
+    border-color: #8fc0ee;
+}
+
+html[data-theme="clair"] #annulerFichier {
+    background: #e1ebf6;
+    color: #12263f;
+}
+
+html[data-theme="clair"] .message-recu .documentMessage {
+    background: rgba(15, 80, 140, 0.1);
+}
+
+/* Adaptation aux petits écrans */
+@media (max-width: 800px) {
+    #apercuFichier {
+        left: 4px;
+        max-width: calc(100% - 8px);
+    }
+
+    .imageMessage {
+        max-width: 100%;
+    }
+
+    .barreSaisie {
+        padding: 4px 8px;
+        gap: 4px;
+    }
+}

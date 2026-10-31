@@ -1,0 +1,231 @@
+
+/* ===== PAGE PARAMÈTRES ===== */
+
+#contenuParametres {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: 30px 40px;
+    background-color: #101820;
+    background-image: none;
+    color: #ffffff;
+}
+
+/* Titre principal */
+#contenuParametres h1 {
+    margin: 0 0 28px;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+/* Blocs des paramètres */
+.carte {
+    max-width: 700px;
+    margin-bottom: 16px;
+    padding: 22px 24px;
+    background-color: #1d2e40;
+    border: 1px solid #263b50;
+    border-radius: 18px;
+}
+
+/* Titres des sections */
+.carte h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+/* Petites descriptions */
+.aide {
+    margin: 0 0 14px;
+    color: #a8bacd;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* ===== PROFIL ===== */
+
+.profil {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nomProfil {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.emailProfil {
+    margin-top: 4px;
+    color: #a8bacd;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+/* ===== APPARENCE ===== */
+
+.choixTheme {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.optionTheme {
+    padding: 12px 22px;
+    border-radius: 12px;
+    border: 2px solid #35516a;
+    background-color: #142536;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.optionTheme:hover {
+    border-color: #1aa0ff;
+}
+
+.optionTheme.choisi {
+    border-color: #1aa0ff;
+    background: linear-gradient(180deg, #1496f5, #0a7ee0);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* ===== NOTIFICATIONS ===== */
+
+#notificationVisuelle,
+#notificationSonore {
+    accent-color: #1aa0ff;
+    width: 17px;
+    height: 17px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.carte label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/* ===== LIENS ===== */
+
+.carte a {
+    color: #45b5ff;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.carte a:hover {
+    text-decoration: underline;
+}
+
+/* ===== DÉCONNEXION ===== */
+
+.boutonDeconnexion {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 12px;
+    border: 1px solid #b8413a;
+    background: transparent;
+    color: #ff7b72;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.boutonDeconnexion:hover {
+    background: rgba(255, 90, 80, 0.12);
+}
+
+.boutonDeconnexion:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Retour aux conversations */
+.retour {
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    color: #45b5ff;
+    text-decoration: none;
+}
+
+.retour:hover {
+    text-decoration: underline;
+}
+
+/* ===== THÈME CLAIR ===== */
+/* Conserver le choix de thème existant */
+
+html[data-theme="light"] #contenuParametres,
+html[data-theme="clair"] #contenuParametres {
+    background-color: #f4f8fc;
+    background-image: none;
+    color: #20344a;
+}
+
+html[data-theme="light"] #contenuParametres h1,
+html[data-theme="clair"] #contenuParametres h1 {
+    color: #20344a;
+}
+
+html[data-theme="light"] .carte,
+html[data-theme="clair"] .carte {
+    background-color: #ffffff;
+    border-color: #d5e1ee;
+}
+
+html[data-theme="light"] .carte h2,
+html[data-theme="clair"] .carte h2,
+html[data-theme="light"] .nomProfil,
+html[data-theme="clair"] .nomProfil,
+html[data-theme="light"] .carte label,
+html[data-theme="clair"] .carte label {
+    color: #20344a;
+}
+
+html[data-theme="light"] .aide,
+html[data-theme="clair"] .aide,
+html[data-theme="light"] .emailProfil,
+html[data-theme="clair"] .emailProfil {
+    color: #5d7390;
+}
+
+html[data-theme="light"] .optionTheme,
+html[data-theme="clair"] .optionTheme {
+    background-color: #ffffff;
+    color: #20344a;
+    border-color: #c5d5e6;
+}
+
+html[data-theme="light"] .optionTheme.choisi,
+html[data-theme="clair"] .optionTheme.choisi {
+    background: linear-gradient(180deg, #1496f5, #0a7ee0);
+    color: #ffffff;
+    border-color: #1aa0ff;
+}
+
+html[data-theme="light"] .boutonDeconnexion,
+html[data-theme="clair"] .boutonDeconnexion {
+    color: #c0392b;
+}
+
+/* ===== PETITS ÉCRANS ===== */
+
+@media (max-width: 800px) {
+    #contenuParametres {
+        padding: 20px 14px;
+    }
+
+    .carte {
+        padding: 18px;
+    }
+}

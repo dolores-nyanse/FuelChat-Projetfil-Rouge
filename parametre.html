@@ -1,62 +1,193 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paramètres</title>
 
-    <title>Paramètres - FuelChat</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="parametre.js" defer></script>
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="conversation.css">
+    <link rel="stylesheet" href="paramettre.css">
 </head>
 
-<body class="page-parametres">
+<body>
+<div id="application">
 
-    <main id="parametres">
+    <!-- Barre latérale -->
+    <aside id="Navigation">
+
+        <div class="logo">
+            <svg class="ico" viewBox="0 0 24 24">
+                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+            </svg>
+            <span>Fuel<b>Chat</b></span>
+        </div>
+
+        <nav class="menu">
+
+            <a class="lienMenu" href="conversation.html">
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Accueil
+            </a>
+
+            <a class="lienMenu" href="conversation.html">
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+                </svg>
+                Chats
+            </a>
+
+            <a class="lienMenu" href="contacts.html">
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Contacts
+            </a>
+
+            <a class="lienMenu actif" href="parametre.html">
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Paramètres
+            </a>
+
+        </nav>
+    </aside>
+
+    <!-- Contenu des paramètres -->
+    <main id="contenuParametres">
 
         <h1>Paramètres</h1>
 
-        <!-- Informations du compte -->
-        <section>
-            <h2>Profil</h2>
+        <!-- PROFIL -->
+        <section class="carte">
+            <h2>Mon profil</h2>
+            <p class="aide">Photo, pseudo et informations</p>
 
-<div id="informationsProfil">
-    <p id="nomUtilisateur"></p>
-    <p id="courrielUtilisateur"></p>
-</div>
+            <div class="profil">
+                <div class="avatar grand">
+                    <svg class="personne" viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4" fill="#e9e6ff"/>
+                        <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#e9e6ff"/>
+                    </svg>
+                </div>
 
-        <!-- Apparence -->
-        <section>
-            <h2>Apparence</h2>
-
-            <label for="choixTheme">Thème :</label>
-
-            <select id="choixTheme">
-                <option value="dark">Sombre</option>
-                <option value="light">Clair</option>
-                <option value="system">Automatique</option>
-            </select>
+                <div>
+                    <div id="nomUtilisateur" class="nomProfil">Chargement…</div>
+                    <div id="emailUtilisateur" class="emailProfil"></div>
+                </div>
+            </div>
         </section>
 
-        <!-- Déconnexion -->
-        <section>
+        <!-- APPARENCE -->
+        <section class="carte">
+            <h2>🎨 Apparence</h2>
+            <p class="aide">Mode sombre, clair et couleurs</p>
+
+            <div class="choixTheme">
+                <button id="themeSombre" class="optionTheme" type="button">
+                    🌙 Sombre
+                </button>
+
+                <button id="themeClair" class="optionTheme" type="button">
+                    ☀️ Clair
+                </button>
+            </div>
+        </section>
+
+        <!-- NOTIFICATIONS -->
+        <section class="carte">
+            <h2>🔔 Notifications</h2>
+            <p class="aide">Alertes et sons des messages</p>
+
+            <div>
+                <label>
+                    <input type="checkbox" id="notificationVisuelle">
+                    Activer les notifications visuelles
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" id="notificationSonore">
+                    Activer les notifications sonores
+                </label>
+            </div>
+        </section>
+
+        <!-- CONFIDENTIALITÉ -->
+        <section class="carte">
+            <h2>🛡️ Confidentialité</h2>
+            <p class="aide">Présence en ligne et visibilité</p>
+        </section>
+
+        <!-- CONVERSATIONS -->
+        <section class="carte">
+            <h2>💬 Conversations</h2>
+            <p class="aide">Gestion des discussions</p>
+
+            <a href="conversation.html">
+                Voir mes conversations
+            </a>
+        </section>
+
+        <!-- SÉCURITÉ -->
+        <section class="carte">
+            <h2>🔒 Sécurité</h2>
+            <p class="aide">Mot de passe et compte</p>
+        </section>
+
+        <!-- À PROPOS -->
+        <section class="carte">
+            <h2>ℹ️ À propos de FuelChat</h2>
+
+            <p class="aide">
+                FuelChat est une application Web de messagerie
+                développée dans le cadre d'un projet universitaire.
+            </p>
+
+            <p class="aide">
+                Vos conversations prennent de la vitesse.
+            </p>
+        </section>
+
+        <!-- SESSION -->
+        <section class="carte">
             <h2>Session</h2>
 
-            <button type="button" id="boutonDeconnexion">
+            <button id="boutonDeconnexion"
+                    class="boutonDeconnexion"
+                    type="button">
+
+                <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" x2="9" y1="12" y2="12"/>
+                </svg>
+
                 Se déconnecter
             </button>
         </section>
 
-        <!-- Navigation -->
-        <p>
-            <a href="conversation.html">Retour aux conversations</a>
-        </p>
+        <a class="retour" href="conversation.html">
+            ← Retour aux conversations
+        </a>
 
     </main>
+</div>
+
+<!-- Scripts existants -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="parametre.js"></script>
 
 </body>
 </html>
