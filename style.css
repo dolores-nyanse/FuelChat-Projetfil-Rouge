@@ -457,3 +457,76 @@ h3{ color: white;
 #Envoi {
     margin-left: 15px;
 }
+
+/* Logo et alignement du titre sur la page d'accueil */
+
+.page-accueil .accueil-gauche h1 {
+    text-align: left;
+    font-size: 56px;
+}
+
+.page-accueil .logo-essence {
+    font-size: 28px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+
+
+/* --amelioration des couleurs--- */
+
+body.page-accueil {
+    background: linear-gradient(135deg, #07111F, #08192F);
+    color: #F5F7FB;
+}
+
+/* Titre FuelChat */
+.page-accueil .accueil-gauche h1 {
+    color: #FFFFFF;
+}
+
+.page-accueil .accueil-gauche h1 span {
+    color: #159BFA;
+}
+
+/* Slogan */
+.page-accueil .accueil-gauche h2 {
+    color: #FFFFFF;
+}
+
+/* Carte de connexion */
+.page-accueil .auth-card {
+    background-color: #0D1B2B;
+    border: 1px solid #244563;
+}
+
+/* Champs */
+.page-accueil input[type="text"],
+.page-accueil input[type="email"],
+.page-accueil input[type="password"] {
+    background-color: #172B40;
+    color: #FFFFFF;
+    border: 1px solid #36516D;
+}
+
+.page-accueil input::placeholder {
+    color: #A9BBD0;
+}
+
+/* Bouton Se connecter */
+.page-accueil #connexion {
+    background: linear-gradient(90deg, #159BFA, #0865F5);
+    color: #FFFFFF;
+}
+
+/* Bouton S'inscrire */
+.page-accueil #inscription {
+    background: transparent;
+    color: #FFFFFF;
+    border: 2px solid #159BFA;
+}
+
+/* Lien mot de passe oublié */
+.page-accueil a {
+    color: #159BFA;
+}
