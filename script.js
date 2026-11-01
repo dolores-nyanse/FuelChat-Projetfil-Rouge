@@ -162,10 +162,11 @@ async function initialiserConversation() {
     const { data, error } = await supabaseClient.auth.getUser();
 
     if (error || !data.user) {
-        alert("Veuillez vous connecter.");
-        window.location.href = "index.html";
-        return;
-    }
+    window.location.replace("index.html");
+    return;
+}
+
+document.getElementById("application").hidden = false;
 
     utilisateurActuel = data.user;
 
