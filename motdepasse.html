@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mot de passe oublié - FuelChat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-accueil">
+
+    <main style="max-width: 440px; margin: 80px auto; padding: 20px;">
+        <h1>Mot de passe oublié ?</h1>
+
+        <p>Entrez votre adresse courriel pour recevoir un lien
+        de réinitialisation de votre mot de passe.</p>
+
+        <form id="formulaireRecuperation">
+            <label for="emailRecuperation">Adresse courriel</label>
+            <input
+                type="email"
+                id="emailRecuperation"
+                required
+                autocomplete="email"
+            >
+
+            <button type="submit">Envoyer le lien</button>
+        </form>
+
+        <p id="messageRecuperation" role="status"></p>
+
+        <p><a href="index.html">Retour à la connexion</a></p>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="motdepasse.js"></script>
+</body>
+</html>

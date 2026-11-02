@@ -11,10 +11,31 @@
     <script src="contacts.js" defer></script>
     </head>
     <body class="page-contacts">
+        <div class="contacts-app">
 
-<div id="contacts">
+    <aside class="contacts-sidebar">
+        <div class="contacts-logo">Fuel<span>Chat</span></div>
 
-    <h1>Mes contacts FuelChat</h1>
+        <nav class="contacts-menu">
+            <a href="index.html" class="menu-link">Accueil</a>
+            <a href="conversation.html" class="menu-link">Chats</a>
+            <a href="contacts.html" class="menu-link actif">Contacts</a>
+            <a href="parametre.html" class="menu-link">Paramètres</a>
+        </nav>
+
+        <button
+            type="button"
+            class="btn-ajout-contact"
+            onclick="document.getElementById('rechercheContact').focus()"
+        >
+            + Nouveau contact
+        </button>
+    </aside>
+
+<main id="contacts" class="contacts-main">
+
+    <h1>Mes contacts</h1>
+
 
     <!-- Recherche des utilisateurs -->
     <div id="recherche">
@@ -38,14 +59,12 @@
     <div id="resultatsRecherche"></div>
 
     <!-- Contacts enregistrés -->
-    <h2>Ma liste de contacts</h2>
+    <h2>Liste de contacts</h2>
     <div id="listecontacts"></div>
 
-    <!-- Navigation -->
-    <p>
-        <a href="conversation.html">Conversations</a>
-    </p>
+   
 
+</main>
 </div>
 
     </body>

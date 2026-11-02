@@ -457,3 +457,328 @@ h3{ color: white;
 #Envoi {
     margin-left: 15px;
 }
+
+/* Logo et alignement du titre sur la page d'accueil */
+
+.page-accueil .accueil-gauche h1 {
+    text-align: left;
+    font-size: 56px;
+}
+
+.page-accueil .logo-essence {
+    font-size: 28px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+
+
+/* --amelioration des couleurs--- */
+
+body.page-accueil {
+    background: linear-gradient(135deg, #07111F, #08192F);
+    color: #F5F7FB;
+}
+
+/* Titre FuelChat */
+.page-accueil .accueil-gauche h1 {
+    color: #FFFFFF;
+}
+
+.page-accueil .accueil-gauche h1 span {
+    color: #159BFA;
+}
+
+/* Slogan */
+.page-accueil .accueil-gauche h2 {
+    color: #FFFFFF;
+}
+
+/* Carte de connexion */
+.page-accueil .auth-card {
+    background-color: #0D1B2B;
+    border: 1px solid #244563;
+}
+
+/* Champs */
+.page-accueil input[type="text"],
+.page-accueil input[type="email"],
+.page-accueil input[type="password"] {
+    background-color: #172B40;
+    color: #FFFFFF;
+    border: 1px solid #36516D;
+}
+
+.page-accueil input::placeholder {
+    color: #A9BBD0;
+}
+
+/* Bouton Se connecter */
+.page-accueil #connexion {
+    background: linear-gradient(90deg, #159BFA, #0865F5);
+    color: #FFFFFF;
+}
+
+/* Bouton S'inscrire */
+.page-accueil #inscription {
+    background: transparent;
+    color: #FFFFFF;
+    border: 2px solid #159BFA;
+}
+
+/* Lien mot de passe oublié */
+.page-accueil a {
+    color: #159BFA;
+}
+
+/* ===== UPDATE CONTACTS ===== */
+
+body.page-contacts {
+    background: #07111f;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* Conteneur principal */
+.page-contacts #contacts {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 25px;
+    background: #0d1926;
+    border-radius: 24px;
+    box-sizing: border-box;
+}
+
+/* Titre */
+.page-contacts #contacts h1 {
+    color: white;
+    text-align: left;
+    font-size: 28px;
+    margin: 0 0 6px;
+}
+
+/* Sous-titre */
+.page-contacts .sous-titre-contacts {
+    color: #9fb2c7;
+    font-size: 16px;
+    margin: 0 0 24px;
+}
+
+/* Titres des sections */
+.page-contacts #contacts h2 {
+    font-size: 21px;
+    color: white;
+    margin: 24px 0 12px;
+}
+
+/* Zone de recherche */
+.page-contacts #recherche {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.page-contacts #recherche label {
+    font-size: 14px;
+}
+
+.page-contacts #recherche input {
+    background: #203448;
+    color: white;
+    border: 1px solid #29455f;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+}
+
+.page-contacts #recherche input::placeholder {
+    color: #9fb2c7;
+}
+
+/* Bouton Rechercher */
+.page-contacts #boutonRecherche {
+    background: #149df5;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+}
+
+/* Contacts et résultats */
+.page-contacts #listecontacts,
+.page-contacts #resultatsRecherche {
+    background: transparent;
+    border: none;
+    min-height: 0;
+    padding: 0;
+}
+
+/* Lien vers les conversations */
+.page-contacts a {
+    color: #36a8ff;
+}
+
+/* Téléphones */
+@media (max-width: 600px) {
+    .page-contacts #contacts {
+        padding: 20px 16px;
+    }
+}
+/* ===== PAGE CONTACTS : update  ===== */
+
+.page-contacts {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #031225 0%, #041a33 100%);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.page-contacts .contacts-app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.page-contacts .contacts-sidebar {
+    width: 290px;
+    background: linear-gradient(180deg, #04162d 0%, #02101f 100%);
+    padding: 30px 24px;
+    box-sizing: border-box;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.page-contacts .contacts-logo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.page-contacts .contacts-logo span {
+    color: #2aa8ff;
+}
+
+.page-contacts .contacts-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 35px;
+}
+
+.page-contacts .menu-link {
+    text-decoration: none;
+    color: white;
+    font-size: 1.15rem;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background-color: rgba(255, 255, 255, 0.04);
+    transition: 0.2s ease;
+}
+
+.page-contacts .menu-link:hover {
+    background-color: rgba(42, 168, 255, 0.18);
+}
+
+.page-contacts .menu-link.actif {
+    background: linear-gradient(180deg, #123b67 0%, #0d2f52 100%);
+    border: 1px solid rgba(42, 168, 255, 0.45);
+}
+
+.page-contacts .btn-ajout-contact {
+    width: 100%;
+    border: none;
+    border-radius: 18px;
+    padding: 18px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(90deg, #1f8ff0 0%, #2daaff 100%);
+    box-shadow: 0 0 20px rgba(42, 168, 255, 0.25);
+}
+
+.page-contacts .contacts-main {
+    flex: 1;
+    padding: 36px;
+    box-sizing: border-box;
+}
+
+.page-contacts #contacts {
+    background: transparent;
+}
+
+.page-contacts h1 {
+    color: white;
+    font-size: 2.4rem;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.page-contacts .contacts-sous-titre {
+    font-size: 1.2rem;
+    color: #9cb9d9;
+    margin-bottom: 28px;
+}
+
+.page-contacts #recherche,
+.page-contacts #resultatsRecherche,
+.page-contacts #listecontacts {
+    background: rgba(4, 18, 37, 0.9);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.page-contacts label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.page-contacts input[type="search"] {
+    width: 100%;
+    padding: 18px 20px;
+    font-size: 1.1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: #223b56;
+    color: white;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+}
+
+.page-contacts input[type="search"]::placeholder {
+    color: #b9c7d8;
+}
+
+.page-contacts #boutonRechercher {
+    border: none;
+    border-radius: 16px;
+    padding: 14px 24px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(90deg, #1f8ff0 0%, #2daaff 100%);
+}
+
+.page-contacts h2 {
+    font-size: 2rem;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+
+/* style automatique pour les éléments que contacts.js ajoute */
+.page-contacts #listecontacts > div,
+.page-contacts #resultatsRecherche > div {
+    background: #1d3652;
+    border-radius: 20px;
+    padding: 18px 20px;
+    margin-top: 14px;
+    font-size: 1.15rem;
+    color: white;
+}

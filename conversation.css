@@ -382,3 +382,6 @@ html[data-theme="clair"] .message-recu .documentMessage {
         gap: 4px;
     }
 }
+#application[hidden] {
+    display: none !important;
+}

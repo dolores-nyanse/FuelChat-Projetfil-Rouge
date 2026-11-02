@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau mot de passe - FuelChat</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="nouveau-motdepasse.js" defer></script>
+</head>
+<body class="page-accueil">
+    <main style="max-width: 440px; margin: 60px auto; padding: 20px;">
+        <h1>Nouveau mot de passe</h1>
+        <p>Choisissez un nouveau mot de passe pour votre compte FuelChat.</p>
+
+        <form id="formulaireNouveauMotDePasse" hidden>
+            <label for="nouveauPassword">Nouveau mot de passe</label>
+            <input type="password" id="nouveauPassword"
+                   minlength="6" required autocomplete="new-password">
+
+            <button type="submit">Enregistrer le mot de passe</button>
+        </form>
+
+        <p id="messageNouveauPassword" role="status">
+            Vérification du lien de récupération...
+        </p>
+
+        <p><a href="index.html">Retour à la connexion</a></p>
+    </main>
+</body>
+</html>
