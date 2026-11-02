@@ -1,0 +1,92 @@
+
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Carburant - FuelChat</title>
+
+    <script>
+        document.documentElement.dataset.theme =
+            localStorage.getItem("theme") || "sombre";
+    </script>
+
+    <link rel="stylesheet" href="carburant.css">
+</head>
+
+<body>
+
+<div id="application">
+
+    <!-- Barre latérale -->
+    <aside id="Navigation">
+
+        <div class="logo">
+            <svg class="ico" viewBox="0 0 24 24">
+                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+            </svg>
+            <span>Fuel<b>Chat</b></span>
+        </div>
+
+        <nav class="menu">
+            <a class="lienMenu" href="index.html">
+                Accueil
+            </a>
+
+            <a class="lienMenu" href="conversation.html">
+                Chats
+            </a>
+
+            <a class="lienMenu" href="contacts.html">
+                Contacts
+            </a>
+
+            <a class="lienMenu actif" href="carburant.html">
+                Carburant
+            </a>
+
+            <a class="lienMenu" href="parametre.html">
+                Paramètres
+            </a>
+        </nav>
+
+    </aside>
+
+    <!-- Contenu principal -->
+    <main id="Carburant">
+
+        <header class="entete">
+            <h1>Carburant</h1>
+            <p>
+                Estimez le coût de vos déplacements
+                et trouvez les stations-service
+                les plus avantageuses.
+            </p>
+        </header>
+
+        <section class="carte">
+            <h2>Estimation de trajet</h2>
+            <p>
+                Le calculateur sera disponible ici.
+            </p>
+        </section>
+
+        <section class="carte">
+            <h2>Stations-service à proximité</h2>
+            <p>
+                Les stations recommandées
+                apparaîtront ici.
+            </p>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="carburant.js"></script>
+
+</body>
+</html>
