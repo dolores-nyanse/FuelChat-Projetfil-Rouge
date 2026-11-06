@@ -386,109 +386,268 @@ html[data-theme="clair"] .message-recu .documentMessage {
     display: none !important;
 }
 
-/* ===== Ajustements de l'affichage sur téléphone uniquement ===== */
-/* Ces règles complètent le CSS existant sans modifier la version ordinateur. */
+/* ===== Affichage téléphone : onglets en haut, deux colonnes en dessous ===== */
+/* Ces règles ne concernent que les écrans de téléphone.
+   La version ordinateur n'est pas modifiée. */
 @media (max-width: 800px) {
+
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* Grille principale : 2 colonnes (conversations | discussion) */
     #application {
+        display: grid;
+        grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+        grid-template-rows: auto auto auto auto minmax(0, 1fr);
         min-width: 0;
         overflow: hidden;
+        background: linear-gradient(180deg, #0a1a2e, #060f1c);
     }
 
+    /* La barre latérale n'a plus de boîte : ses éléments
+       se placent directement dans la grille ci-dessus */
     #Navigation {
-        box-sizing: border-box;
-        width: 100%;
-        height: 44dvh;
-        max-height: none;
-        min-height: 0;
-        flex: 0 0 44dvh;
-        padding: 10px 12px 8px;
-        overflow: hidden;
+        display: contents;
     }
 
+    /* Ligne 1 : logo */
     .logo {
-        flex-shrink: 0;
+        grid-column: 1 / -1;
+        grid-row: 1;
+        padding: 8px 12px 0;
+        font-size: 22px;
     }
 
+    .logo .ico {
+        width: 28px;
+        height: 28px;
+    }
+
+    /* Ligne 2 : les 5 onglets (icône au-dessus du texte) */
     .menu {
+        grid-column: 1 / -1;
+        grid-row: 2;
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 4px;
-        margin: 8px 0;
-        flex-shrink: 0;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 2px;
+        margin: 6px 6px 0;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #12304f;
     }
 
     .lienMenu {
         min-width: 0;
-        padding: 8px 5px;
-        gap: 5px;
+        flex-direction: column;
         justify-content: center;
-        font-size: 12px;
+        align-items: center;
+        gap: 3px;
+        padding: 6px 2px;
+        font-size: 11px;
+        text-align: center;
         white-space: nowrap;
     }
 
     .lienMenu .ico {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
     }
 
+    /* Colonne de gauche : Nouveau chat, recherche, conversations */
     #boutonNewChat {
-        flex-shrink: 0;
-        padding: 9px;
-        font-size: 14px;
+        grid-column: 1;
+        grid-row: 3;
+        width: auto;
+        margin: 8px 6px 0 8px;
+        padding: 9px 6px;
+        gap: 4px;
+        font-size: 12px;
+    }
+
+    #boutonNewChat .ico {
+        width: 16px;
+        height: 16px;
     }
 
     .recherche {
-        flex-shrink: 0;
-        height: 38px;
-        margin: 8px 0;
+        grid-column: 1;
+        grid-row: 4;
+        height: 36px;
+        margin: 8px 6px 6px 8px;
+        padding: 0 8px;
+        gap: 6px;
+    }
+
+    .recherche .ico {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* 16 px minimum : évite le zoom automatique de Safari sur iPhone */
+    .recherche input {
+        font-size: 16px;
     }
 
     #listeChats {
-        flex: 1 1 auto;
+        grid-column: 1;
+        grid-row: 5;
         min-height: 0;
+        margin: 0;
+        padding: 0 6px 8px 8px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
 
+    .ajouterContact {
+        display: none;
+    }
+
+    .itemChat {
+        gap: 8px;
+        padding: 8px 6px;
+    }
+
+    .itemChat .avatar {
+        width: 38px;
+        height: 38px;
+    }
+
+    .nomItem {
+        font-size: 14px;
+    }
+
+    .heureItem {
+        font-size: 11px;
+    }
+
+    .apercuItem {
+        font-size: 12px;
+    }
+
+    /* Colonne de droite : la discussion */
     #Messages {
+        grid-column: 2;
+        grid-row: 3 / 6;
         min-width: 0;
         min-height: 0;
         overflow: hidden;
+        border-left: 1px solid #12304f;
     }
 
     #enteteChat {
         flex-shrink: 0;
+        min-height: 56px;
+        gap: 8px;
+        padding: 8px 10px;
+    }
+
+    #enteteChat .avatar.grand {
+        width: 38px;
+        height: 38px;
     }
 
     #titreChat {
-        font-size: 17px;
+        font-size: 16px;
         overflow-wrap: anywhere;
+    }
+
+    #statutChat {
+        font-size: 12px;
     }
 
     #listeMessages {
         min-height: 0;
+        padding: 10px;
+        gap: 10px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
 
-    .message {
-        max-width: 88%;
+    .ligneMessage {
+        gap: 6px;
     }
 
+    .ligneMessage .avatar.petit {
+        width: 28px;
+        height: 28px;
+    }
+
+    .message {
+        max-width: 90%;
+        padding: 8px 12px;
+    }
+
+    .message-recu {
+        gap: 8px;
+    }
+
+    .texteMessage {
+        font-size: 15px;
+    }
+
+    .metaMessage {
+        font-size: 11px;
+    }
+
+    /* Zone de saisie */
     #Envoi {
         flex-shrink: 0;
-        margin: 0 8px 8px;
-        gap: 5px;
-        padding: 5px;
+        margin: 0 6px 8px;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .barreSaisie {
+        padding: 2px 6px;
+        gap: 2px;
+    }
+
+    .boutonIcone {
+        padding: 4px;
+    }
+
+    .boutonIcone .ico {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* 16 px minimum : évite le zoom automatique de Safari sur iPhone */
+    #messageInput {
+        font-size: 16px;
+        padding: 8px 2px;
     }
 
     #boutonEnvoyer {
-        width: 42px;
-        height: 42px;
+        width: 38px;
+        height: 38px;
+    }
+
+    #boutonEnvoyer .ico {
+        width: 20px;
+        height: 20px;
     }
 
     #panneauEmoji {
-        max-width: calc(100vw - 24px);
+        left: 0;
+        right: 0;
         grid-template-columns: repeat(6, minmax(0, 1fr));
+        padding: 8px;
+    }
+
+    #panneauEmoji button {
+        font-size: 22px;
+    }
+
+    /* Thème clair sur téléphone */
+    html[data-theme="clair"] #application {
+        background: linear-gradient(180deg, #ffffff, #f1f6fc);
+    }
+
+    html[data-theme="clair"] .menu {
+        border-bottom-color: #d5e1ee;
+    }
+
+    html[data-theme="clair"] #Messages {
+        border-left-color: #d5e1ee;
     }
 }
