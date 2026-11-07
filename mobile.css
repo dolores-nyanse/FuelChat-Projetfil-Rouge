@@ -1,0 +1,408 @@
+
+/*
+   FUELCHAT - AFFICHAGE MOBILE
+   Ce fichier ne modifie pas l'affichage ordinateur.
+   Le CSS original reste intact.
+*/
+
+/* Bouton retour invisible sur ordinateur */
+#boutonRetourListe {
+    display: none;
+}
+
+@media (max-width: 800px) {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    /* Structure générale du téléphone */
+    #application {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows:
+            auto
+            auto
+            auto
+            minmax(0, 1fr)
+            auto;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        background: linear-gradient(
+            180deg,
+            #0a1a2e,
+            #060f1c
+        );
+    }
+
+    #Navigation {
+        display: contents;
+    }
+
+    /* Logo */
+    .logo {
+        grid-column: 1;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 18px 12px;
+        font-size: 26px;
+        min-width: 0;
+    }
+
+    .logo .ico {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* Barre de navigation en bas */
+    .menu {
+        grid-column: 1;
+        grid-row: 5;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 2px;
+        margin: 0;
+        padding: 8px 5px
+            calc(8px + env(safe-area-inset-bottom));
+        border-top: 1px solid #1d3b5c;
+        border-bottom: none;
+        background: #091a2d;
+        z-index: 10;
+    }
+
+    .lienMenu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        min-width: 0;
+        padding: 9px 1px;
+        border-radius: 12px;
+        font-size: 11px;
+        line-height: 1.2;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .lienMenu .ico {
+        width: 23px;
+        height: 23px;
+    }
+
+    .lienMenu.actif {
+        background: linear-gradient(
+            180deg,
+            #168fe9,
+            #086fc9
+        );
+        color: #ffffff;
+        border-color: #248fe4;
+    }
+
+    /* Bouton Nouveau chat */
+    #boutonNewChat {
+        grid-column: 1;
+        grid-row: 2;
+        width: auto;
+        margin: 8px 16px 10px;
+        padding: 13px;
+        font-size: 16px;
+        border-radius: 14px;
+    }
+
+    /* Recherche */
+    .recherche {
+        grid-column: 1;
+        grid-row: 3;
+        width: auto;
+        height: 48px;
+        margin: 0 16px 12px;
+        padding: 0 14px;
+        border-radius: 14px;
+    }
+
+    .recherche input {
+        font-size: 16px;
+    }
+
+    /* Liste des conversations en pleine largeur */
+    #listeChats {
+        grid-column: 1;
+        grid-row: 4;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        margin: 0;
+        padding: 4px 12px 16px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .itemChat {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 14px 12px;
+        margin-bottom: 9px;
+        border: 1px solid #1b3a5b;
+        border-radius: 17px;
+        background: #10233c;
+    }
+
+    .itemChat .avatar {
+        width: 52px;
+        height: 52px;
+    }
+
+    .infosItem {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .nomItem {
+        font-size: 16px;
+    }
+
+    .heureItem {
+        font-size: 12px;
+    }
+
+    .apercuItem {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .itemChat.actif {
+        background: #16395e;
+        border-color: #168fe9;
+        box-shadow: inset 3px 0 0 #1aa0ff;
+    }
+
+    .ajouterContact {
+        display: none;
+    }
+
+    /* La discussion est cachée sur la liste */
+    #Messages {
+        display: none;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    /*
+       Lorsqu'un contact est sélectionné,
+       le script.js existant ajoute vueDiscussion.
+    */
+    #application.vueDiscussion #boutonNewChat,
+    #application.vueDiscussion .recherche,
+    #application.vueDiscussion #listeChats {
+        display: none;
+    }
+
+    #application.vueDiscussion #Messages {
+        grid-column: 1;
+        grid-row: 2 / 5;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border-left: none;
+    }
+
+    /* En-tête de la discussion */
+    #enteteChat {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: 10px;
+        min-height: 66px;
+        padding: 10px 14px;
+    }
+
+    #boutonRetourListe {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: #39aaff;
+        font-size: 30px;
+        line-height: 1;
+    }
+
+    #enteteChat .avatar.grand {
+        width: 44px;
+        height: 44px;
+    }
+
+    #titreChat {
+        font-size: 17px;
+        overflow-wrap: anywhere;
+    }
+
+    #statutChat {
+        font-size: 13px;
+    }
+
+    /* Messages */
+    #listeMessages {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 14px 12px;
+        gap: 12px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .ligneMessage {
+        gap: 7px;
+    }
+
+    .ligneMessage .avatar.petit {
+        width: 30px;
+        height: 30px;
+    }
+
+    .message {
+        max-width: 82%;
+        padding: 10px 13px;
+    }
+
+    .message-recu {
+        gap: 8px;
+    }
+
+    .texteMessage {
+        font-size: 15px;
+    }
+
+    .metaMessage {
+        font-size: 11px;
+    }
+
+    /* Zone de saisie */
+    #Envoi {
+        flex-shrink: 0;
+        min-width: 0;
+        margin: 0 10px 10px;
+        padding: 5px;
+        gap: 5px;
+    }
+
+    .barreSaisie {
+        flex: 1;
+        min-width: 0;
+        gap: 4px;
+        padding: 4px 8px;
+    }
+
+    .boutonIcone {
+        padding: 5px;
+    }
+
+    .boutonIcone .ico {
+        width: 21px;
+        height: 21px;
+    }
+
+    #messageInput {
+        min-width: 0;
+        font-size: 16px;
+        padding: 8px 2px;
+    }
+
+    #boutonEnvoyer {
+        width: 43px;
+        height: 43px;
+    }
+
+    #boutonEnvoyer .ico {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* Emojis et pièces jointes */
+    #panneauEmoji {
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        grid-template-columns:
+            repeat(6, minmax(0, 1fr));
+        padding: 8px;
+    }
+
+    #apercuFichier {
+        left: 4px;
+        max-width: calc(100% - 8px);
+    }
+
+    .imageMessage {
+        max-width: 100%;
+    }
+
+    /* Thème clair */
+    html[data-theme="clair"] #application {
+        background: linear-gradient(
+            180deg,
+            #ffffff,
+            #f1f6fc
+        );
+    }
+
+    html[data-theme="clair"] .menu {
+        background: #ffffff;
+        border-top-color: #d5e1ee;
+        border-bottom: none;
+    }
+
+    html[data-theme="clair"] .itemChat {
+        background: #ffffff;
+        border-color: #d5e1ee;
+    }
+
+    html[data-theme="clair"] .itemChat.actif {
+        background: #dceeff;
+        border-color: #168fe9;
+    }
+
+    html[data-theme="clair"] #boutonRetourListe {
+        color: #0878ce;
+    }
+}
+
+/* Téléphones très étroits */
+@media (max-width: 360px) {
+    .lienMenu {
+        font-size: 10px;
+        gap: 4px;
+    }
+
+    .lienMenu .ico {
+        width: 20px;
+        height: 20px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+}
