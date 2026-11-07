@@ -1,0 +1,288 @@
+
+/*
+   FUELCHAT - PAGE CONTACTS
+   Adaptation mobile uniquement.
+   Le fichier style.css reste inchangé.
+*/
+
+/* Conserver les quatre onglets actuels sur ordinateur */
+.page-contacts .menu-link-carburant {
+    display: none;
+}
+
+@media (max-width: 800px) {
+
+    html {
+        width: 100%;
+        min-height: 100%;
+    }
+
+    body.page-contacts {
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background: linear-gradient(
+            180deg,
+            #061a31 0%,
+            #031225 100%
+        );
+        color: #ffffff;
+    }
+
+    .page-contacts,
+    .page-contacts * {
+        box-sizing: border-box;
+    }
+
+    /*
+       Réorganisation mobile :
+       logo en haut,
+       bouton d'ajout,
+       contenu sur toute la largeur,
+       navigation en bas.
+    */
+
+    .page-contacts .contacts-app {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows:
+            auto
+            auto
+            minmax(0, 1fr)
+            auto;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+
+    .page-contacts .contacts-sidebar {
+        display: contents;
+    }
+
+    /* Logo en haut */
+    .page-contacts .contacts-logo {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+        padding: 22px 18px 14px;
+        font-size: 27px;
+        font-weight: 700;
+        background: transparent;
+    }
+
+    .page-contacts .contacts-logo span {
+        color: #2aa8ff;
+    }
+
+    /* Bouton Nouveau contact */
+    .page-contacts .btn-ajout-contact {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: stretch;
+        width: auto;
+        margin: 8px 16px 16px;
+        padding: 13px 16px;
+        font-size: 16px;
+        border-radius: 14px;
+        background: linear-gradient(
+            90deg,
+            #168fe9,
+            #087ee0
+        );
+    }
+
+    /* Contenu principal */
+    .page-contacts .contacts-main,
+    .page-contacts #contacts {
+        grid-column: 1;
+        grid-row: 3;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        min-height: 0;
+        margin: 0;
+        padding: 6px 16px 24px;
+        overflow: visible;
+        background: transparent;
+        border-radius: 0;
+    }
+
+    .page-contacts #contacts h1,
+    .page-contacts h1 {
+        margin: 4px 0 20px;
+        color: #ffffff;
+        font-size: 28px;
+        line-height: 1.2;
+        text-align: left;
+    }
+
+    .page-contacts #contacts h2,
+    .page-contacts h2 {
+        margin: 24px 0 12px;
+        color: #ffffff;
+        font-size: 20px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    /* Recherche en pleine largeur */
+    .page-contacts #recherche {
+        width: 100%;
+        min-width: 0;
+        margin: 0 0 20px;
+        padding: 18px;
+        border: 1px solid #1d3b5c;
+        border-radius: 18px;
+        background: #0c2038;
+    }
+
+    .page-contacts #recherche label {
+        display: block;
+        margin-bottom: 12px;
+        color: #e8f1fb;
+        font-size: 15px;
+        line-height: 1.4;
+    }
+
+    .page-contacts #recherche input,
+    .page-contacts input[type="search"] {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        margin: 0 0 12px;
+        padding: 13px 14px;
+        border: 1px solid #36516d;
+        border-radius: 12px;
+        background: #172b40;
+        color: #ffffff;
+        font-size: 16px;
+    }
+
+    .page-contacts #recherche input::placeholder {
+        color: #9fb2c7;
+    }
+
+    .page-contacts #boutonRecherche {
+        display: block;
+        width: 100%;
+        min-height: 46px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 12px;
+        background: #149df5;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Résultats et contacts */
+    .page-contacts #resultatsRecherche,
+    .page-contacts #listecontacts {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        margin: 0 0 20px;
+        padding: 12px;
+        border: 1px solid #1d3b5c;
+        border-radius: 16px;
+        background: #0c2038;
+        overflow-wrap: anywhere;
+    }
+
+    .page-contacts #resultatsRecherche > div,
+    .page-contacts #listecontacts > div {
+        width: 100%;
+        min-width: 0;
+        margin: 8px 0;
+        padding: 13px;
+        border-radius: 12px;
+        background: #17334e;
+        font-size: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .page-contacts #resultatsRecherche button,
+    .page-contacts #listecontacts button {
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    /*
+       Navigation mobile :
+       cinq onglets alignés en bas.
+    */
+
+    .page-contacts .contacts-menu {
+        grid-column: 1;
+        grid-row: 4;
+        position: sticky;
+        bottom: 0;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 3px;
+        width: 100%;
+        margin: 0;
+        padding: 8px 5px
+            calc(8px + env(safe-area-inset-bottom));
+        border-top: 1px solid #1d3b5c;
+        background: #091a2d;
+    }
+
+    .page-contacts .menu-link,
+    .page-contacts .menu-link-carburant {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 52px;
+        padding: 8px 2px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        background: transparent;
+        color: #dbe8f7;
+        font-size: 11px;
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .page-contacts .menu-link.actif {
+        border-color: #248fe4;
+        background: linear-gradient(
+            180deg,
+            #168fe9,
+            #086fc9
+        );
+        color: #ffffff;
+        font-weight: 700;
+    }
+
+    .page-contacts .menu-link:hover {
+        background-color: rgba(42, 168, 255, 0.15);
+    }
+}
+
+/* Téléphones plus étroits */
+@media (max-width: 360px) {
+    .page-contacts .contacts-logo {
+        font-size: 24px;
+    }
+
+    .page-contacts .menu-link {
+        font-size: 10px;
+    }
+
+    .page-contacts .contacts-main,
+    .page-contacts #contacts {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
