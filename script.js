@@ -1,4 +1,3 @@
-
 const messageInput = document.getElementById("messageInput");
 const boutonEnvoyer = document.getElementById("boutonEnvoyer");
 const listeMessages = document.getElementById("listeMessages");
@@ -1151,3 +1150,47 @@ function verifierNotifications(messages) {
 // ===== LANCER FUELCHAT =====
 
 initialiserConversation();
+
+// ===== AFFICHAGE TÉLÉPHONE : LISTE DES CONVERSATIONS / DISCUSSION =====
+// Ce bloc ne modifie aucune fonction ci-dessus.
+// Il ajoute ou retire seulement la classe "vueDiscussion" sur la page :
+// sur téléphone, la liste des conversations et la discussion s'affichent
+// chacune en pleine largeur. Sur ordinateur, cette classe n'a aucun effet.
+(function () {
+    const application = document.getElementById("application");
+    const boutonRetourListe = document.getElementById("boutonRetourListe");
+
+    if (!application || !boutonRetourListe) return;
+
+    let nouveauChatDemande = 0;
+
+    function ouvrirDiscussion() {
+        application.classList.add("vueDiscussion");
+    }
+
+    function afficherListe() {
+        application.classList.remove("vueDiscussion");
+    }
+
+    // Clic sur une conversation : on ouvre la discussion.
+    // Clic sur "Nouveau chat" : on note l'heure du clic.
+    document.addEventListener("click", (evenement) => {
+        if (evenement.target.closest(".itemChat")) {
+            ouvrirDiscussion();
+        } else if (evenement.target.closest("#boutonNewChat")) {
+            nouveauChatDemande = Date.now();
+        }
+    }, true);
+
+    // Après "Nouveau chat", le contact choisi s'ouvre :
+    // le nom change en haut, on affiche alors la discussion.
+    new MutationObserver(() => {
+        if (nouveauChatDemande && Date.now() - nouveauChatDemande < 30000) {
+            nouveauChatDemande = 0;
+            ouvrirDiscussion();
+        }
+    }).observe(titreChat, { childList: true, characterData: true, subtree: true });
+
+    // Flèche ← : retour à la liste des conversations
+    boutonRetourListe.addEventListener("click", afficherListe);
+})();
