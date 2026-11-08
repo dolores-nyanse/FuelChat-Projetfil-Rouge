@@ -1,288 +1,307 @@
+/* ===== PAGE CONTACTS ===== */
 
-/*
-   FUELCHAT - PAGE CONTACTS
-   Adaptation mobile uniquement.
-   Le fichier style.css reste inchangé.
-*/
-
-/* Conserver les quatre onglets actuels sur ordinateur */
-.page-contacts .menu-link-carburant {
-    display: none;
+/* L'onglet Carburant reste toujours visible (ordinateur et téléphone) */
+body.page-contacts .contacts-menu .menu-link-carburant {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
+
+/* ===== TÉLÉPHONE : UNE SEULE COLONNE ===== */
+/* Même organisation que la page Paramètres :
+   logo en haut, onglets en une rangée, contenu en pleine largeur.
+   Ces règles ne s'appliquent qu'aux écrans de téléphone.
+   La version ordinateur n'est pas modifiée. */
 
 @media (max-width: 800px) {
 
-    html {
-        width: 100%;
-        min-height: 100%;
-    }
-
+    /* ----- Page complète ----- */
     body.page-contacts {
-        width: 100%;
-        min-height: 100vh;
-        min-height: 100dvh;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0 !important;
         margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-        background: linear-gradient(
-            180deg,
-            #061a31 0%,
-            #031225 100%
-        );
-        color: #ffffff;
+        padding: 0 !important;
+        overflow: hidden;
     }
 
-    .page-contacts,
-    .page-contacts * {
-        box-sizing: border-box;
-    }
-
-    /*
-       Réorganisation mobile :
-       logo en haut,
-       bouton d'ajout,
-       contenu sur toute la largeur,
-       navigation en bas.
-    */
-
-    .page-contacts .contacts-app {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows:
-            auto
-            auto
-            minmax(0, 1fr)
-            auto;
+    body.page-contacts .contacts-app {
+        display: flex !important;
+        flex-direction: column !important;
         width: 100%;
-        min-height: 100vh;
-        min-height: 100dvh;
-    }
-
-    .page-contacts .contacts-sidebar {
-        display: contents;
-    }
-
-    /* Logo en haut */
-    .page-contacts .contacts-logo {
-        grid-column: 1;
-        grid-row: 1;
-        margin: 0;
-        padding: 22px 18px 14px;
-        font-size: 27px;
-        font-weight: 700;
-        background: transparent;
-    }
-
-    .page-contacts .contacts-logo span {
-        color: #2aa8ff;
-    }
-
-    /* Bouton Nouveau contact */
-    .page-contacts .btn-ajout-contact {
-        grid-column: 1;
-        grid-row: 2;
-        justify-self: stretch;
-        width: auto;
-        margin: 8px 16px 16px;
-        padding: 13px 16px;
-        font-size: 16px;
-        border-radius: 14px;
-        background: linear-gradient(
-            90deg,
-            #168fe9,
-            #087ee0
-        );
-    }
-
-    /* Contenu principal */
-    .page-contacts .contacts-main,
-    .page-contacts #contacts {
-        grid-column: 1;
-        grid-row: 3;
-        width: 100%;
-        max-width: none;
-        min-width: 0;
-        min-height: 0;
-        margin: 0;
-        padding: 6px 16px 24px;
-        overflow: visible;
-        background: transparent;
-        border-radius: 0;
-    }
-
-    .page-contacts #contacts h1,
-    .page-contacts h1 {
-        margin: 4px 0 20px;
-        color: #ffffff;
-        font-size: 28px;
-        line-height: 1.2;
-        text-align: left;
-    }
-
-    .page-contacts #contacts h2,
-    .page-contacts h2 {
-        margin: 24px 0 12px;
-        color: #ffffff;
-        font-size: 20px;
-        line-height: 1.3;
-        overflow-wrap: anywhere;
-    }
-
-    /* Recherche en pleine largeur */
-    .page-contacts #recherche {
-        width: 100%;
-        min-width: 0;
-        margin: 0 0 20px;
-        padding: 18px;
-        border: 1px solid #1d3b5c;
-        border-radius: 18px;
-        background: #0c2038;
-    }
-
-    .page-contacts #recherche label {
-        display: block;
-        margin-bottom: 12px;
-        color: #e8f1fb;
-        font-size: 15px;
-        line-height: 1.4;
-    }
-
-    .page-contacts #recherche input,
-    .page-contacts input[type="search"] {
-        display: block;
-        width: 100%;
-        min-width: 0;
-        margin: 0 0 12px;
-        padding: 13px 14px;
-        border: 1px solid #36516d;
-        border-radius: 12px;
-        background: #172b40;
-        color: #ffffff;
-        font-size: 16px;
-    }
-
-    .page-contacts #recherche input::placeholder {
-        color: #9fb2c7;
-    }
-
-    .page-contacts #boutonRecherche {
-        display: block;
-        width: 100%;
-        min-height: 46px;
-        padding: 12px 16px;
-        border: none;
-        border-radius: 12px;
-        background: #149df5;
-        color: #ffffff;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    /* Résultats et contacts */
-    .page-contacts #resultatsRecherche,
-    .page-contacts #listecontacts {
-        width: 100%;
-        min-width: 0;
-        min-height: 48px;
-        margin: 0 0 20px;
-        padding: 12px;
-        border: 1px solid #1d3b5c;
-        border-radius: 16px;
-        background: #0c2038;
-        overflow-wrap: anywhere;
-    }
-
-    .page-contacts #resultatsRecherche > div,
-    .page-contacts #listecontacts > div {
-        width: 100%;
-        min-width: 0;
-        margin: 8px 0;
-        padding: 13px;
-        border-radius: 12px;
-        background: #17334e;
-        font-size: 15px;
-        overflow-wrap: anywhere;
-    }
-
-    .page-contacts #resultatsRecherche button,
-    .page-contacts #listecontacts button {
         max-width: 100%;
-        white-space: normal;
-        overflow-wrap: anywhere;
+        height: 100vh;
+        height: 100dvh;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden;
+        background-color: #050d18;
+        background-image:
+            radial-gradient(circle at 85% -5%, rgba(20, 150, 245, 0.3), transparent 55%),
+            linear-gradient(180deg, #0a1a2e, #050d18);
     }
 
-    /*
-       Navigation mobile :
-       cinq onglets alignés en bas.
-    */
+    /* La barre latérale n'a plus de boîte : logo, menu et bouton
+       se placent directement dans la page */
+    body.page-contacts .contacts-sidebar {
+        display: contents !important;
+    }
 
-    .page-contacts .contacts-menu {
-        grid-column: 1;
-        grid-row: 4;
-        position: sticky;
-        bottom: 0;
-        z-index: 20;
-        display: grid;
+    /* ----- Logo ----- */
+    body.page-contacts .contacts-logo {
+        flex-shrink: 0;
+        width: auto !important;
+        margin: 0 !important;
+        padding: calc(env(safe-area-inset-top, 0px) + 14px) 16px 6px;
+        font-size: 26px;
+        font-weight: 700;
+        text-decoration: none;
+        color: #e8f1fb;
+    }
+
+    body.page-contacts .contacts-logo span {
+        color: #1aa0ff;
+    }
+
+    /* ----- Onglets : une rangée sur toute la largeur ----- */
+    body.page-contacts .contacts-menu {
+        position: static !important;
+        flex-shrink: 0;
+        display: grid !important;
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        align-items: stretch;
         gap: 3px;
-        width: 100%;
-        margin: 0;
-        padding: 8px 5px
-            calc(8px + env(safe-area-inset-bottom));
-        border-top: 1px solid #1d3b5c;
-        background: #091a2d;
+        width: auto !important;
+        margin: 6px 8px 0 !important;
+        padding: 0 0 8px !important;
+        border: none;
+        border-bottom: 1px solid #12304f;
+        background: transparent;
+        box-shadow: none;
     }
 
-    .page-contacts .menu-link,
-    .page-contacts .menu-link-carburant {
-        display: flex;
+    body.page-contacts .contacts-menu .menu-link,
+    body.page-contacts .contacts-menu .menu-link-carburant {
+        display: flex !important;
         align-items: center;
         justify-content: center;
+        width: auto !important;
         min-width: 0;
-        min-height: 52px;
-        padding: 8px 2px;
+        margin: 0 !important;
+        padding: 10px 2px;
         border: 1px solid transparent;
         border-radius: 12px;
         background: transparent;
         color: #dbe8f7;
-        font-size: 11px;
+        font-size: 11.5px;
         font-weight: 500;
         text-align: center;
         text-decoration: none;
         white-space: nowrap;
     }
 
-    .page-contacts .menu-link.actif {
-        border-color: #248fe4;
-        background: linear-gradient(
-            180deg,
-            #168fe9,
-            #086fc9
-        );
+    body.page-contacts .contacts-menu .menu-link.actif {
+        background: linear-gradient(180deg, #1496f5, #0a7ee0);
         color: #ffffff;
-        font-weight: 700;
+        font-weight: 600;
     }
 
-    .page-contacts .menu-link:hover {
-        background-color: rgba(42, 168, 255, 0.15);
+    /* ----- Bouton "Nouveau contact" ----- */
+    body.page-contacts .btn-ajout-contact {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto !important;
+        margin: 12px 14px 0 !important;
+        padding: 14px;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #1496f5, #0a7ee0);
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        box-shadow: 0 0 14px rgba(20, 150, 245, 0.35);
     }
-}
 
-/* Téléphones plus étroits */
-@media (max-width: 360px) {
-    .page-contacts .contacts-logo {
-        font-size: 24px;
+    /* ----- Contenu : pleine largeur, c'est lui qui défile ----- */
+    body.page-contacts #contacts.contacts-main {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: none !important;
+        min-width: 0;
+        min-height: 0;
+        margin: 0 !important;
+        padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 24px) !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        background: transparent;
+        color: #e8f1fb;
     }
 
-    .page-contacts .menu-link {
-        font-size: 10px;
+    body.page-contacts #contacts h1 {
+        margin: 4px 4px 14px;
+        font-size: 26px;
+        text-align: left;
+        color: #e8f1fb;
     }
 
-    .page-contacts .contacts-main,
-    .page-contacts #contacts {
-        padding-left: 12px;
-        padding-right: 12px;
+    body.page-contacts #contacts h2 {
+        margin: 20px 4px 10px;
+        font-size: 18px;
+        color: #e8f1fb;
+    }
+
+    /* ----- Recherche : carte pleine largeur ----- */
+    body.page-contacts #recherche {
+        width: 100%;
+        margin: 0;
+        padding: 16px;
+        background: #0f2036;
+        border: 1px solid #1d3b5c;
+        border-radius: 18px;
+    }
+
+    body.page-contacts #recherche label {
+        display: block;
+        margin: 0 0 10px;
+        font-size: 15px;
+        color: #aebfd3;
+    }
+
+    /* 16 px minimum : évite le zoom automatique de Safari sur iPhone */
+    body.page-contacts #recherche input {
+        display: block;
+        width: 100%;
+        height: 48px;
+        margin: 0 0 12px;
+        padding: 0 14px;
+        background: #07111f;
+        color: #e8f1fb;
+        border: 1px solid #1d3b5c;
+        border-radius: 14px;
+        font-size: 16px;
+        -webkit-appearance: none;
+        appearance: none;
+        outline: none;
+    }
+
+    body.page-contacts #recherche input::placeholder {
+        color: #7d92aa;
+    }
+
+    body.page-contacts #recherche input:focus {
+        border-color: #1aa0ff;
+    }
+
+    body.page-contacts #contacts button {
+        min-height: 44px;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(180deg, #1496f5, #0a7ee0);
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    body.page-contacts #recherche #boutonRecherche {
+        width: 100% !important;
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    /* ----- Résultats et liste de contacts : cartes ----- */
+    body.page-contacts #resultatsRecherche,
+    body.page-contacts #listecontacts {
+        width: 100%;
+        min-height: 56px;
+        margin: 0;
+        padding: 6px 14px;
+        background: #0f2036;
+        border: 1px solid #1d3b5c;
+        border-radius: 18px;
+        overflow-wrap: anywhere;
+    }
+
+    body.page-contacts #resultatsRecherche > *,
+    body.page-contacts #listecontacts > * {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 0;
+        padding: 12px 0;
+        font-size: 16px;
+        line-height: 1.35;
+        color: #e8f1fb;
+        border-bottom: 1px solid #12304f;
+    }
+
+    body.page-contacts #resultatsRecherche > *:last-child,
+    body.page-contacts #listecontacts > *:last-child {
+        border-bottom: none;
+    }
+
+    body.page-contacts #resultatsRecherche button,
+    body.page-contacts #listecontacts button {
+        flex-shrink: 0;
+    }
+
+    /* ----- Thème clair ----- */
+    html[data-theme="clair"] body.page-contacts .contacts-app {
+        background-color: #eef3f9;
+        background-image:
+            radial-gradient(circle at 85% -5%, rgba(20, 150, 245, 0.16), transparent 55%),
+            linear-gradient(180deg, #ffffff, #eef3f9);
+    }
+
+    html[data-theme="clair"] body.page-contacts .contacts-logo,
+    html[data-theme="clair"] body.page-contacts #contacts h1,
+    html[data-theme="clair"] body.page-contacts #contacts h2 {
+        color: #12263f;
+    }
+
+    html[data-theme="clair"] body.page-contacts .contacts-logo span {
+        color: #1aa0ff;
+    }
+
+    html[data-theme="clair"] body.page-contacts #contacts.contacts-main {
+        color: #12263f;
+    }
+
+    html[data-theme="clair"] body.page-contacts .contacts-menu {
+        border-bottom-color: #d5e1ee;
+    }
+
+    html[data-theme="clair"] body.page-contacts .contacts-menu .menu-link {
+        color: #24405f;
+    }
+
+    html[data-theme="clair"] body.page-contacts .contacts-menu .menu-link.actif {
+        color: #ffffff;
+    }
+
+    html[data-theme="clair"] body.page-contacts #recherche,
+    html[data-theme="clair"] body.page-contacts #resultatsRecherche,
+    html[data-theme="clair"] body.page-contacts #listecontacts {
+        background: #ffffff;
+        border-color: #d5e1ee;
+    }
+
+    html[data-theme="clair"] body.page-contacts #recherche label {
+        color: #5d7390;
+    }
+
+    html[data-theme="clair"] body.page-contacts #recherche input {
+        background: #f4f8fc;
+        color: #12263f;
+        border-color: #c5d5e6;
+    }
+
+    html[data-theme="clair"] body.page-contacts #resultatsRecherche > *,
+    html[data-theme="clair"] body.page-contacts #listecontacts > * {
+        color: #12263f;
+        border-bottom-color: #e1ebf6;
     }
 }

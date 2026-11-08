@@ -1,71 +1,72 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <title>Contacts - FuelChat</title>
 
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="contacts-mobile.css?v=4">
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="contacts.js" defer></script>
-    </head>
-    <body class="page-contacts">
-        <div class="contacts-app">
+</head>
 
-    <aside class="contacts-sidebar">
-        <div class="contacts-logo">Fuel<span>Chat</span></div>
+<body class="page-contacts">
+    <div class="contacts-app">
 
-        <nav class="contacts-menu">
-            <a href="index.html" class="menu-link">Accueil</a>
-            <a href="conversation.html" class="menu-link">Chats</a>
-            <a href="contacts.html" class="menu-link actif">Contacts</a>
-            <a href="parametre.html" class="menu-link">Paramètres</a>
-        </nav>
+        <aside class="contacts-sidebar">
+            <div class="contacts-logo">Fuel<span>Chat</span></div>
 
-        <button
-            type="button"
-            class="btn-ajout-contact"
-            onclick="document.getElementById('rechercheContact').focus()"
-        >
-            + Nouveau contact
-        </button>
-    </aside>
+            <nav class="contacts-menu">
+                <a href="index.html" class="menu-link">Accueil</a>
+                <a href="conversation.html" class="menu-link">Chats</a>
+                <a href="contacts.html" class="menu-link actif">Contacts</a>
+                <a href="carburant.html" class="menu-link menu-link-carburant">Carburant</a>
+                <a href="parametre.html" class="menu-link">Paramètres</a>
+            </nav>
 
-<main id="contacts" class="contacts-main">
+            <button
+                type="button"
+                class="btn-ajout-contact"
+                onclick="document.getElementById('rechercheContact').focus()"
+            >
+                + Nouveau contact
+            </button>
+        </aside>
 
-    <h1>Mes contacts</h1>
+        <main id="contacts" class="contacts-main">
 
+            <h1>Mes contacts</h1>
 
-    <!-- Recherche des utilisateurs -->
-    <div id="recherche">
-        <label for="rechercheContact">
-            Rechercher un utilisateur
-        </label>
+            <!-- Recherche des utilisateurs -->
+            <div id="recherche">
+                <label for="rechercheContact">
+                    Rechercher un utilisateur
+                </label>
 
-        <input
-            type="search"
-            id="rechercheContact"
-            placeholder="Nom d'utilisateur"
-        >
+                <input
+                    type="search"
+                    id="rechercheContact"
+                    placeholder="Nom d'utilisateur"
+                >
 
-        <button type="button" id="boutonRecherche">
-            Rechercher
-        </button>
+                <button type="button" id="boutonRecherche">
+                    Rechercher
+                </button>
+            </div>
+
+            <!-- Résultats de recherche -->
+            <h2>Résultats de recherche</h2>
+            <div id="resultatsRecherche"></div>
+
+            <!-- Contacts enregistrés -->
+            <h2>Liste de contacts</h2>
+            <div id="listecontacts"></div>
+
+        </main>
     </div>
-
-    <!-- Résultats de recherche -->
-    <h2>Résultats de recherche</h2>
-    <div id="resultatsRecherche"></div>
-
-    <!-- Contacts enregistrés -->
-    <h2>Liste de contacts</h2>
-    <div id="listecontacts"></div>
-
-   
-
-</main>
-</div>
-
-    </body>
+</body>
 </html>
