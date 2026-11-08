@@ -6,7 +6,7 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: 100%;
     margin: 0;
 }
 
@@ -138,11 +138,13 @@ body {
 
 .carte p {
     color: #9fb3c9;
+    line-height: 1.6;
 }
 
-/* ===== Formulaire d'estimation ===== */
+/* ===== Formulaires ===== */
 
-#formulaireTrajet {
+#formulaireTrajet,
+#formulaireStations {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -181,9 +183,12 @@ body {
     color: #7d92aa;
 }
 
-/* ===== Bouton de calcul ===== */
+/* ===== Boutons ===== */
 
-#boutonCalculer {
+#boutonCalculer,
+#boutonStations,
+#boutonPosition {
+    width: 100%;
     padding: 14px 20px;
     border: none;
     border-radius: 10px;
@@ -193,10 +198,91 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    text-align: center;
 }
 
-#boutonCalculer:hover {
+#boutonCalculer:hover,
+#boutonStations:hover,
+#boutonPosition:hover {
     filter: brightness(1.1);
+}
+
+#boutonPosition {
+    background: #173d61;
+    border: 1px solid #2875af;
+}
+
+button:focus-visible {
+    outline: 3px solid #75c7ff;
+    outline-offset: 3px;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* ===== Résultat du trajet ===== */
+
+#resultatTrajet {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #24517c;
+    border-radius: 12px;
+    background: #0a192b;
+    line-height: 1.8;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+#resultatTrajet[hidden] {
+    display: none;
+}
+
+/* ===== Recherche des stations ===== */
+
+#formulaireStations {
+    margin-top: 20px;
+}
+
+#statutStations {
+    margin-top: 18px;
+    line-height: 1.6;
+}
+
+#resultatsStations {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 280px), 1fr)
+    );
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* Cartes créées par JavaScript */
+
+#resultatsStations .carte {
+    margin-bottom: 0;
+    padding: 20px;
+    background: #0a192b;
+    border-color: #24517c;
+}
+
+#resultatsStations h3 {
+    margin: 0 0 14px;
+    font-size: 18px;
+    color: #e8f1fb;
+}
+
+#resultatsStations p {
+    margin: 8px 0;
+    overflow-wrap: anywhere;
+}
+
+#attributionStations {
+    margin-top: 20px;
+    font-size: 13px;
 }
 
 /* ===== Thème clair ===== */
@@ -251,6 +337,27 @@ html[data-theme="clair"] .champ input::placeholder {
     color: #7d92aa;
 }
 
+html[data-theme="clair"] #boutonPosition {
+    background: #e5f2ff;
+    border-color: #9cc6ee;
+    color: #0a5fb0;
+}
+
+html[data-theme="clair"] #resultatTrajet {
+    background: #eef6ff;
+    border-color: #c5dff5;
+    color: #12263f;
+}
+
+html[data-theme="clair"] #resultatsStations .carte {
+    background: #f7fbff;
+    border-color: #c5dff5;
+}
+
+html[data-theme="clair"] #resultatsStations h3 {
+    color: #12263f;
+}
+
 /* ===== Adaptation téléphone ===== */
 
 @media (max-width: 800px) {
@@ -265,9 +372,14 @@ html[data-theme="clair"] .champ input::placeholder {
         border-bottom: 1px solid #12304f;
     }
 
+    .logo {
+        font-size: 24px;
+    }
+
     .menu {
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 6px;
     }
 
     .lienMenu {
@@ -279,16 +391,50 @@ html[data-theme="clair"] .champ input::placeholder {
         padding: 16px;
     }
 
+    .entete h1 {
+        font-size: 25px;
+    }
+
     .carte {
         padding: 18px;
     }
 
-    #formulaireTrajet {
+    #formulaireTrajet,
+    #formulaireStations {
         max-width: 100%;
     }
 
     .champ input,
     .champ select {
         font-size: 16px;
+    }
+
+    #resultatsStations {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 400px) {
+
+    #Navigation {
+        padding: 14px 10px;
+    }
+
+    #Carburant {
+        padding: 12px;
+    }
+
+    .carte {
+        padding: 15px;
+    }
+
+    .lienMenu {
+        font-size: 13px;
+    }
+
+    #boutonCalculer,
+    #boutonStations,
+    #boutonPosition {
+        font-size: 15px;
     }
 }

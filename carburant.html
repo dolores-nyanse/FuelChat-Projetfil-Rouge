@@ -4,8 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Carburant - FuelChat</title>
 
@@ -32,25 +31,11 @@
         </div>
 
         <nav class="menu">
-            <a class="lienMenu" href="index.html">
-                Accueil
-            </a>
-
-            <a class="lienMenu" href="conversation.html">
-                Chats
-            </a>
-
-            <a class="lienMenu" href="contacts.html">
-                Contacts
-            </a>
-
-            <a class="lienMenu actif" href="carburant.html">
-                Carburant
-            </a>
-
-            <a class="lienMenu" href="parametre.html">
-                Paramètres
-            </a>
+            <a class="lienMenu" href="index.html">Accueil</a>
+            <a class="lienMenu" href="conversation.html">Chats</a>
+            <a class="lienMenu" href="contacts.html">Contacts</a>
+            <a class="lienMenu actif" href="carburant.html">Carburant</a>
+            <a class="lienMenu" href="parametre.html">Paramètres</a>
         </nav>
 
     </aside>
@@ -67,7 +52,7 @@
             </p>
         </header>
 
-        <!-- Formulaire d'estimation du trajet -->
+        <!-- Estimation du trajet -->
         <section class="carte">
 
             <h2>Estimation de trajet</h2>
@@ -75,9 +60,7 @@
             <form id="formulaireTrajet">
 
                 <div class="champ">
-                    <label for="depart">
-                        Lieu de départ
-                    </label>
+                    <label for="depart">Lieu de départ</label>
                     <input
                         type="text"
                         id="depart"
@@ -86,9 +69,7 @@
                 </div>
 
                 <div class="champ">
-                    <label for="destination">
-                        Destination
-                    </label>
+                    <label for="destination">Destination</label>
                     <input
                         type="text"
                         id="destination"
@@ -114,22 +95,14 @@
                         Type de carburant
                     </label>
                     <select id="typeCarburant" required>
-                        <option value="">
-                            Choisir un carburant
-                        </option>
-                        <option value="ordinaire">
-                            Ordinaire
-                        </option>
-                        <option value="super">
-                            Super
-                        </option>
-                        <option value="diesel">
-                            Diesel
-                        </option>
+                        <option value="">Choisir un carburant</option>
+                        <option value="ordinaire">Ordinaire</option>
+                        <option value="super">Super</option>
+                        <option value="diesel">Diesel</option>
                     </select>
                 </div>
 
-                <!-- Distance de secours si l'API échoue -->
+                <!-- Secours si l'API de trajet est indisponible -->
                 <div class="champ">
                     <label for="distanceManuelle">
                         Distance manuelle (km) — facultatif
@@ -148,19 +121,63 @@
 
             </form>
 
-            <!-- Résultats du calcul -->
-            <div id="resultatTrajet" hidden></div>
+            <div id="resultatTrajet" hidden aria-live="polite"></div>
 
         </section>
 
-        <!-- Recherche des stations-service -->
+        <!-- Recherche des stations -->
         <section class="carte">
 
             <h2>Stations-service à proximité</h2>
 
             <p>
-                Les stations recommandées
-                apparaîtront ici.
+                Recherchez les stations autour de votre position
+                ou du lieu de départ de votre trajet.
+            </p>
+
+            <div id="formulaireStations">
+
+                <div class="champ">
+                    <button type="button" id="boutonPosition">
+                        Utiliser ma position
+                    </button>
+                </div>
+
+                <div class="champ">
+                    <label for="rayonRecherche">
+                        Rayon de recherche
+                    </label>
+                    <select id="rayonRecherche">
+                        <option value="5">5 km</option>
+                        <option value="10" selected>10 km</option>
+                        <option value="20">20 km</option>
+                    </select>
+                </div>
+
+                <div class="champ">
+                    <label for="classementStations">
+                        Classement des stations
+                    </label>
+                    <select id="classementStations">
+                        <option value="value">Recommandé</option>
+                        <option value="price">Moins cher</option>
+                        <option value="distance">Plus proche</option>
+                    </select>
+                </div>
+
+                <button type="button" id="boutonStations">
+                    Trouver les stations
+                </button>
+
+            </div>
+
+            <p id="statutStations" role="status" aria-live="polite"></p>
+
+            <div id="resultatsStations"></div>
+
+            <p id="attributionStations" hidden>
+                Données des stations : Gas Quebec.
+                Les prix sont déclarés et peuvent varier.
             </p>
 
         </section>
