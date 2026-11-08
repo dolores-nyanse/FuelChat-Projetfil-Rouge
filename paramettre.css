@@ -229,3 +229,150 @@ html[data-theme="clair"] .boutonDeconnexion {
         padding: 18px;
     }
 }
+
+/* ===== TÉLÉPHONE : UNE SEULE COLONNE ===== */
+/* Les règles de conversation.css pour téléphone coupent la page en deux
+   colonnes (conversations | discussion). Elles ne conviennent pas à la
+   page Paramètres : ce bloc les remplace ici seulement.
+   La version ordinateur et la page Chats ne sont pas modifiées. */
+
+@media (max-width: 800px) {
+
+    html body #application,
+    html[data-theme] body #application {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-width: 0;
+        overflow: hidden;
+        background: transparent;
+    }
+
+    /* Barre latérale : on garde le logo et le menu, empilés en haut */
+    html body #application #Navigation {
+        display: contents;
+    }
+
+    /* Logo */
+    html body #application .logo {
+        flex-shrink: 0;
+        padding: 14px 16px 6px;
+        font-size: 24px;
+    }
+
+    html body #application .logo .ico {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Onglets en une rangée, sur toute la largeur (non fixés en bas) */
+    html body #application .menu {
+        position: static;
+        flex-shrink: 0;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(0, 1fr);
+        gap: 2px;
+        margin: 6px 8px 0;
+        padding: 0 0 8px;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #12304f;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    html body #application .lienMenu {
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+        padding: 8px 2px;
+        font-size: 11px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    html body #application .lienMenu .ico {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Contenu : pleine largeur, c'est lui qui défile */
+    html body #application #contenuParametres {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        min-height: 0;
+        padding: 14px 14px 28px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    html body #application #contenuParametres h1 {
+        margin: 0 0 16px;
+        font-size: 26px;
+    }
+
+    /* Cartes : toute la largeur de l'écran */
+    html body #application #contenuParametres .carte {
+        width: 100%;
+        max-width: none;
+        margin: 0 0 12px;
+        padding: 16px;
+        overflow-wrap: anywhere;
+    }
+
+    html body #application #contenuParametres .carte h2 {
+        font-size: 18px;
+    }
+
+    /* Profil : le texte prend la place restante, sans être coupé */
+    html body #application #contenuParametres .profil > div:last-child {
+        flex: 1;
+        min-width: 0;
+    }
+
+    html body #application #contenuParametres .nomProfil {
+        font-size: 18px;
+        overflow-wrap: anywhere;
+    }
+
+    /* Thème : Sombre et Clair côte à côte */
+    html body #application #contenuParametres .choixTheme {
+        flex-wrap: nowrap;
+    }
+
+    html body #application #contenuParametres .optionTheme {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 12px 8px;
+    }
+
+    /* Notifications : le texte peut passer à la ligne */
+    html body #application #contenuParametres .carte label {
+        align-items: flex-start;
+        min-height: 40px;
+    }
+
+    html body #application #contenuParametres .carte label input {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    /* Bouton de déconnexion : pleine largeur */
+    html body #application #contenuParametres .boutonDeconnexion {
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+    }
+
+    html[data-theme="clair"] body #application .menu {
+        border-bottom-color: #d5e1ee;
+    }
+}

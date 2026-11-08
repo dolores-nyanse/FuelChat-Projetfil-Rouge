@@ -386,8 +386,13 @@ html[data-theme="clair"] .message-recu .documentMessage {
     display: none !important;
 }
 
-/* ===== Affichage téléphone : onglets en haut, deux colonnes en dessous ===== */
-/* Ces règles ne concernent que les écrans de téléphone.
+/* Bouton retour à la liste : caché sur ordinateur */
+.boutonRetour {
+    display: none;
+}
+
+/* ===== Affichage téléphone (style de la maquette) ===== */
+/* Ces règles ne concernent que les téléphones.
    La version ordinateur n'est pas modifiée. */
 @media (max-width: 800px) {
 
@@ -395,45 +400,59 @@ html[data-theme="clair"] .message-recu .documentMessage {
         overflow-x: hidden;
     }
 
-    /* Grille principale : 2 colonnes (conversations | discussion) */
+    /* Page complète : logo en haut, contenu, barre d'onglets en bas */
     #application {
-        display: grid;
-        grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto minmax(0, 1fr);
+        --barre: calc(84px + env(safe-area-inset-bottom, 0px));
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh;
         min-width: 0;
         overflow: hidden;
-        background: linear-gradient(180deg, #0a1a2e, #060f1c);
+        background-color: #050d18;
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 160' preserveAspectRatio='none'%3E%3Cpath d='M0 110 C80 120 140 60 220 70 C300 80 340 30 400 10 L400 160 L0 160 Z' fill='%231496f5' fill-opacity='0.18'/%3E%3C/svg%3E"),
+            radial-gradient(circle at 85% -5%, rgba(20, 150, 245, 0.35), transparent 55%),
+            linear-gradient(180deg, #0a1a2e, #050d18);
+        background-repeat: no-repeat;
+        background-position: bottom left, top, center;
+        background-size: 100% 180px, 100% 320px, 100% 100%;
     }
 
     /* La barre latérale n'a plus de boîte : ses éléments
-       se placent directement dans la grille ci-dessus */
+       se placent directement dans la page */
     #Navigation {
         display: contents;
     }
 
-    /* Ligne 1 : logo */
+    /* Logo */
     .logo {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        padding: 8px 12px 0;
-        font-size: 22px;
+        flex-shrink: 0;
+        padding: calc(env(safe-area-inset-top, 0px) + 12px) 18px 6px;
+        font-size: 28px;
     }
 
     .logo .ico {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
     }
 
-    /* Ligne 2 : les 5 onglets (icône au-dessus du texte) */
+    /* Barre des 5 onglets, fixée en bas de l'écran */
     .menu {
-        grid-column: 1 / -1;
-        grid-row: 2;
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+        z-index: 20;
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 2px;
-        margin: 6px 6px 0;
-        padding-bottom: 6px;
-        border-bottom: 1px solid #12304f;
+        margin: 0;
+        padding: 6px;
+        background: rgba(10, 26, 46, 0.96);
+        border: 1px solid #1d3b5c;
+        border-radius: 26px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
 
     .lienMenu {
@@ -442,45 +461,42 @@ html[data-theme="clair"] .message-recu .documentMessage {
         justify-content: center;
         align-items: center;
         gap: 3px;
-        padding: 6px 2px;
+        padding: 8px 2px;
+        border-radius: 20px;
         font-size: 11px;
         text-align: center;
         white-space: nowrap;
     }
 
     .lienMenu .ico {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
     }
 
-    /* Colonne de gauche : Nouveau chat, recherche, conversations */
+    .lienMenu.actif {
+        background: linear-gradient(180deg, #1496f5, #0a7ee0);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 0 12px rgba(20, 150, 245, 0.45);
+    }
+
+    /* ----- Écran 1 : liste des conversations (pleine largeur) ----- */
     #boutonNewChat {
-        grid-column: 1;
-        grid-row: 3;
+        flex-shrink: 0;
         width: auto;
-        margin: 8px 6px 0 8px;
-        padding: 9px 6px;
-        gap: 4px;
-        font-size: 12px;
-    }
-
-    #boutonNewChat .ico {
-        width: 16px;
-        height: 16px;
+        margin: 10px 16px 0;
+        padding: 15px;
+        border-radius: 18px;
+        font-size: 17px;
     }
 
     .recherche {
-        grid-column: 1;
-        grid-row: 4;
-        height: 36px;
-        margin: 8px 6px 6px 8px;
-        padding: 0 8px;
-        gap: 6px;
-    }
-
-    .recherche .ico {
-        width: 16px;
-        height: 16px;
+        flex-shrink: 0;
+        height: 48px;
+        margin: 12px 16px 10px;
+        padding: 0 14px;
+        gap: 10px;
+        border-radius: 16px;
     }
 
     /* 16 px minimum : évite le zoom automatique de Safari sur iPhone */
@@ -489,11 +505,10 @@ html[data-theme="clair"] .message-recu .documentMessage {
     }
 
     #listeChats {
-        grid-column: 1;
-        grid-row: 5;
+        flex: 1 1 auto;
         min-height: 0;
         margin: 0;
-        padding: 0 6px 8px 8px;
+        padding: 2px 16px calc(var(--barre) + 10px);
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
@@ -503,112 +518,149 @@ html[data-theme="clair"] .message-recu .documentMessage {
     }
 
     .itemChat {
-        gap: 8px;
-        padding: 8px 6px;
+        gap: 14px;
+        padding: 14px;
+        margin-bottom: 10px;
+        border: 1px solid #1d3b5c;
+        border-radius: 20px;
+        background: rgba(15, 32, 54, 0.75);
+    }
+
+    .itemChat.actif {
+        border-color: #1aa0ff;
+        background: rgba(20, 110, 200, 0.3);
+        box-shadow: 0 0 14px rgba(20, 150, 245, 0.35);
     }
 
     .itemChat .avatar {
-        width: 38px;
-        height: 38px;
+        width: 52px;
+        height: 52px;
     }
 
     .nomItem {
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .heureItem {
-        font-size: 11px;
+        font-size: 14px;
     }
 
     .apercuItem {
-        font-size: 12px;
+        font-size: 15px;
     }
 
-    /* Colonne de droite : la discussion */
+    /* ----- Écran 2 : discussion (pleine largeur) ----- */
+    #application:not(.vueDiscussion) #Messages {
+        display: none;
+    }
+
+    #application.vueDiscussion .logo,
+    #application.vueDiscussion .menu,
+    #application.vueDiscussion #boutonNewChat,
+    #application.vueDiscussion .recherche,
+    #application.vueDiscussion #listeChats {
+        display: none;
+    }
+
     #Messages {
-        grid-column: 2;
-        grid-row: 3 / 6;
+        flex: 1 1 auto;
         min-width: 0;
         min-height: 0;
         overflow: hidden;
-        border-left: 1px solid #12304f;
+    }
+
+    .boutonRetour {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-left: -4px;
+        padding: 4px;
+        background: none;
+        border: none;
+        color: #1aa0ff;
+    }
+
+    .boutonRetour .ico {
+        width: 28px;
+        height: 28px;
     }
 
     #enteteChat {
         flex-shrink: 0;
-        min-height: 56px;
-        gap: 8px;
-        padding: 8px 10px;
+        min-height: 60px;
+        gap: 10px;
+        padding: calc(env(safe-area-inset-top, 0px) + 10px) 14px 10px;
     }
 
     #enteteChat .avatar.grand {
-        width: 38px;
-        height: 38px;
+        width: 44px;
+        height: 44px;
     }
 
     #titreChat {
-        font-size: 16px;
+        font-size: 18px;
         overflow-wrap: anywhere;
     }
 
     #statutChat {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     #listeMessages {
         min-height: 0;
-        padding: 10px;
+        padding: 12px;
         gap: 10px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
 
     .ligneMessage {
-        gap: 6px;
-    }
-
-    .ligneMessage .avatar.petit {
-        width: 28px;
-        height: 28px;
-    }
-
-    .message {
-        max-width: 90%;
-        padding: 8px 12px;
-    }
-
-    .message-recu {
         gap: 8px;
     }
 
+    .ligneMessage .avatar.petit {
+        width: 30px;
+        height: 30px;
+    }
+
+    .message {
+        max-width: 85%;
+        padding: 10px 14px;
+    }
+
+    .message-recu {
+        gap: 10px;
+    }
+
     .texteMessage {
-        font-size: 15px;
+        font-size: 16px;
     }
 
     .metaMessage {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     /* Zone de saisie */
     #Envoi {
         flex-shrink: 0;
-        margin: 0 6px 8px;
-        padding: 4px;
-        gap: 4px;
+        margin: 0 10px calc(env(safe-area-inset-bottom, 0px) + 10px);
+        padding: 5px;
+        gap: 5px;
     }
 
     .barreSaisie {
-        padding: 2px 6px;
+        padding: 2px 8px;
         gap: 2px;
     }
 
     .boutonIcone {
-        padding: 4px;
+        padding: 5px;
     }
 
     .boutonIcone .ico {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
     }
 
     /* 16 px minimum : évite le zoom automatique de Safari sur iPhone */
@@ -618,13 +670,13 @@ html[data-theme="clair"] .message-recu .documentMessage {
     }
 
     #boutonEnvoyer {
-        width: 38px;
-        height: 38px;
+        width: 44px;
+        height: 44px;
     }
 
     #boutonEnvoyer .ico {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
     }
 
     #panneauEmoji {
@@ -638,16 +690,145 @@ html[data-theme="clair"] .message-recu .documentMessage {
         font-size: 22px;
     }
 
-    /* Thème clair sur téléphone */
+    /* ----- Page Paramètres : même cadre que les Chats ----- */
+    #application #contenuParametres {
+        flex: 1 1 auto;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 6px 14px calc(var(--barre) + 12px);
+        background: transparent;
+    }
+
+    #application #contenuParametres h1 {
+        margin: 6px 4px 14px;
+        font-size: 26px;
+    }
+
+    /* Cartes : toute la largeur de l'écran */
+    #application #contenuParametres .carte {
+        width: 100%;
+        max-width: none;
+        margin: 0 0 12px;
+        padding: 16px;
+        border-radius: 20px;
+        overflow-wrap: anywhere;
+    }
+
+    #application #contenuParametres .carte h2 {
+        margin: 0 0 6px;
+        font-size: 18px;
+    }
+
+    #application #contenuParametres .carte .aide {
+        margin: 0 0 12px;
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    /* Profil : photo à gauche, pseudo et courriel à droite sur une ligne */
+    #application #contenuParametres .profil {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #application #contenuParametres .profil > div:last-child {
+        flex: 1;
+        min-width: 0;
+    }
+
+    #application #contenuParametres .nomProfil {
+        font-size: 18px;
+        overflow-wrap: anywhere;
+    }
+
+    #application #contenuParametres .emailProfil {
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    /* Thème : Sombre et Clair côte à côte, de même largeur */
+    #application #contenuParametres .choixTheme {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    #application #contenuParametres .optionTheme {
+        width: 100%;
+        padding: 12px 8px;
+        font-size: 16px;
+    }
+
+    /* Notifications : cases faciles à toucher */
+    #application #contenuParametres .carte label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 44px;
+        padding: 6px 0;
+        font-size: 15px;
+        line-height: 1.35;
+    }
+
+    #application #contenuParametres .carte input[type="checkbox"] {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        margin: 0;
+    }
+
+    /* Liens et bouton de déconnexion */
+    #application #contenuParametres .carte a {
+        display: inline-block;
+        padding: 8px 0;
+    }
+
+    #application #contenuParametres .boutonDeconnexion {
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    #application #contenuParametres .retour {
+        display: block;
+        padding: 8px 4px 0;
+    }
+
+    /* ----- Thème clair sur téléphone ----- */
     html[data-theme="clair"] #application {
-        background: linear-gradient(180deg, #ffffff, #f1f6fc);
+        background-color: #eef3f9;
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 160' preserveAspectRatio='none'%3E%3Cpath d='M0 110 C80 120 140 60 220 70 C300 80 340 30 400 10 L400 160 L0 160 Z' fill='%231496f5' fill-opacity='0.12'/%3E%3C/svg%3E"),
+            radial-gradient(circle at 85% -5%, rgba(20, 150, 245, 0.18), transparent 55%),
+            linear-gradient(180deg, #ffffff, #eef3f9);
     }
 
     html[data-theme="clair"] .menu {
-        border-bottom-color: #d5e1ee;
+        background: rgba(255, 255, 255, 0.96);
+        border-color: #d5e1ee;
+        box-shadow: 0 6px 20px rgba(20, 60, 110, 0.15);
     }
 
-    html[data-theme="clair"] #Messages {
-        border-left-color: #d5e1ee;
+    html[data-theme="clair"] .lienMenu.actif {
+        color: #fff;
+    }
+
+    html[data-theme="clair"] .itemChat {
+        background: #ffffff;
+        border-color: #d5e1ee;
+    }
+
+    html[data-theme="clair"] .itemChat.actif {
+        background: #e6f1fc;
+        border-color: #1aa0ff;
+    }
+
+    html[data-theme="clair"] .boutonRetour {
+        color: #0a7ee0;
     }
 }

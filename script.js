@@ -1,3 +1,4 @@
+
 const messageInput = document.getElementById("messageInput");
 const boutonEnvoyer = document.getElementById("boutonEnvoyer");
 const listeMessages = document.getElementById("listeMessages");
@@ -11,7 +12,6 @@ const rechercheChat = document.getElementById("rechercheChat");
 const boutonEmoji = document.getElementById("boutonEmoji");
 const panneauEmoji = document.getElementById("panneauEmoji");
 
-// Nouveaux éléments pour les pièces jointes
 const boutonFichier = document.getElementById("boutonFichier");
 const fichierInput = document.getElementById("fichierInput");
 const apercuFichier = document.getElementById("apercuFichier");
@@ -44,6 +44,7 @@ const EXTENSIONS_AUTORISEES = [
 
 let fichierSelectionne = null;
 let envoiEnCours = false;
+let suppressionEnCours = false;
 
 let utilisateurActuel = null;
 let chats = [];
@@ -51,25 +52,29 @@ let chatActif = null;
 let apercus = {};
 let dernierChatAffiche = null;
 
-// Présence et écriture
 let canalPresence = null;
 let utilisateursEnLigne = new Set();
 let contactEcrit = false;
 let minuterieEcriture = null;
 let derniereEmissionEcriture = 0;
 
-// Notifications
 let notificationsInitialisees = false;
 let dernierMessageConnu = 0;
 let audioNotifications = null;
 let minuterieNotification = null;
 
-// Liens temporaires des pièces jointes
 let cacheLiensFichiers = new Map();
 let compteurAffichage = 0;
 
+// Menu caché pour supprimer un message
+let menuMessage = null;
+let minuterieAppuiLong = null;
+let appuiLongEffectue = false;
+
 const AVATAR_SVG = '<svg class="personne" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#e9e6ff"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#e9e6ff"/></svg>';
+
 const COCHE_SIMPLE = '<svg class="coche" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
 const COCHE_DOUBLE = '<svg class="coche" viewBox="0 0 24 24"><path d="M1 12.5l4.5 4.5L15 7.5"/><path d="M9 15.5l1.5 1.5L21 7.5"/></svg>';
 
 const EMOJIS = [
@@ -161,11 +166,11 @@ async function initialiserConversation() {
     const { data, error } = await supabaseClient.auth.getUser();
 
     if (error || !data.user) {
-    window.location.replace("index.html");
-    return;
-}
+        window.location.replace("index.html");
+        return;
+    }
 
-document.getElementById("application").hidden = false;
+    document.getElementById("application").hidden = false;
 
     utilisateurActuel = data.user;
 
@@ -253,6 +258,7 @@ function texteApercu(message) {
         if (message.fichier_type?.startsWith("image/")) {
             return "📷 Photo";
         }
+
         return "📎 " + (message.fichier_nom || "Document");
     }
 
@@ -356,10 +362,29 @@ function afficherListeChats() {
 
 rechercheChat.addEventListener("input", afficherListeChats);
 
-async function ouvrirChat(id) {
-    chatActif = chats.find(chat => chat.id === id);
+// ===== OUVRIR UNE CONVERSATION =====
 
-    if (!chatActif) return;
+async function ouvrirChat(id) {
+    const nouveauChat = chats.find(chat => chat.id === id);
+
+    if (!nouveauChat) return;
+
+    fermerMenuMessage();
+
+    if (!chatActif || chatActif.id !== nouveauChat.id) {
+        if (chatActif && messageInput.value.trim() !== "") {
+            signalerEcriture(false);
+        }
+
+        messageInput.value = "";
+        messageInput.style.height = "auto";
+        panneauEmoji.hidden = true;
+
+        // Éviter de conserver une pièce jointe pour un autre contact
+        annulerSelectionFichier();
+    }
+
+    chatActif = nouveauChat;
 
     localStorage.setItem("contactActifId", chatActif.id);
 
@@ -403,7 +428,6 @@ boutonNewChat.addEventListener("click", async function() {
 
 // ===== PIÈCES JOINTES =====
 
-// Ouvrir le choix de fichier
 boutonFichier.addEventListener("click", () => {
     if (!chatActif) {
         alert("Choisissez d'abord une conversation.");
@@ -413,7 +437,6 @@ boutonFichier.addEventListener("click", () => {
     fichierInput.click();
 });
 
-// Quand un fichier est choisi
 fichierInput.addEventListener("change", () => {
     const fichier = fichierInput.files[0];
 
@@ -440,7 +463,6 @@ fichierInput.addEventListener("change", () => {
     apercuFichier.hidden = false;
 });
 
-// Annuler la pièce jointe
 function annulerSelectionFichier() {
     fichierSelectionne = null;
     fichierInput.value = "";
@@ -450,11 +472,9 @@ function annulerSelectionFichier() {
 
 annulerFichier.addEventListener("click", annulerSelectionFichier);
 
-// Envoyer le fichier dans Supabase Storage
 async function envoyerFichier(fichier, destinataireId) {
     const extension = fichier.name.split(".").pop().toLowerCase();
 
-    // Chaque fichier possède un chemin unique
     const chemin =
         utilisateurActuel.id + "/" +
         destinataireId + "/" +
@@ -474,7 +494,6 @@ async function envoyerFichier(fichier, destinataireId) {
     return chemin;
 }
 
-// Obtenir un lien temporaire pour un fichier privé
 async function obtenirLienFichier(chemin) {
     const maintenant = Date.now();
     const cache = cacheLiensFichiers.get(chemin);
@@ -499,7 +518,6 @@ async function obtenirLienFichier(chemin) {
     return data.signedUrl;
 }
 
-// Afficher une image ou un document dans une bulle
 async function afficherPieceJointe(message, bulle, numeroAffichage) {
     if (!message.fichier_chemin) return;
 
@@ -510,7 +528,6 @@ async function afficherPieceJointe(message, bulle, numeroAffichage) {
     try {
         const lien = await obtenirLienFichier(message.fichier_chemin);
 
-        // Ne rien afficher si l'utilisateur a changé de conversation
         if (numeroAffichage !== compteurAffichage) return;
 
         conteneur.textContent = "";
@@ -543,13 +560,241 @@ async function afficherPieceJointe(message, bulle, numeroAffichage) {
 
     } catch (erreur) {
         console.error("Fichier :", erreur);
+
         if (numeroAffichage === compteurAffichage) {
             conteneur.textContent = "Fichier indisponible";
         }
     }
 }
 
-// ===== MESSAGES =====
+// ===== MENU CACHÉ DES MESSAGES =====
+
+// Le menu est créé en JavaScript.
+// Aucun changement nécessaire dans conversation.html.
+
+function fermerMenuMessage() {
+    if (menuMessage) {
+        menuMessage.remove();
+        menuMessage = null;
+    }
+}
+
+function ouvrirMenuMessage(message, x, y) {
+    if (!utilisateurActuel) return;
+
+    // Le menu n'est accessible que sur les messages envoyés.
+    if (message.sender_id !== utilisateurActuel.id) return;
+
+    fermerMenuMessage();
+
+    menuMessage = document.createElement("div");
+    menuMessage.id = "menuMessageFuelChat";
+
+    menuMessage.style.cssText = `
+        position: fixed;
+        z-index: 10000;
+        min-width: 155px;
+        padding: 6px;
+        border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid #dce5f0;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+        font-family: Arial, sans-serif;
+    `;
+
+    const boutonSupprimer = document.createElement("button");
+    boutonSupprimer.type = "button";
+    boutonSupprimer.textContent = "🗑️ Supprimer";
+
+    boutonSupprimer.style.cssText = `
+        display: block;
+        width: 100%;
+        padding: 11px 13px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: #d32f2f;
+        font-size: 14px;
+        font-family: inherit;
+        text-align: left;
+        cursor: pointer;
+    `;
+
+    boutonSupprimer.addEventListener("mouseenter", () => {
+        boutonSupprimer.style.background = "#fff0f0";
+    });
+
+    boutonSupprimer.addEventListener("mouseleave", () => {
+        boutonSupprimer.style.background = "transparent";
+    });
+
+    boutonSupprimer.addEventListener("click", function(evenement) {
+        evenement.stopPropagation();
+
+        fermerMenuMessage();
+
+        supprimerMessage(message.id, message.sender_id);
+    });
+
+    menuMessage.appendChild(boutonSupprimer);
+    document.body.appendChild(menuMessage);
+
+    // Garder le menu à l'intérieur de l'écran.
+    const largeur = menuMessage.offsetWidth;
+    const hauteur = menuMessage.offsetHeight;
+
+    const positionX = Math.max(
+        8,
+        Math.min(x, window.innerWidth - largeur - 8)
+    );
+
+    const positionY = Math.max(
+        8,
+        Math.min(y, window.innerHeight - hauteur - 8)
+    );
+
+    menuMessage.style.left = positionX + "px";
+    menuMessage.style.top = positionY + "px";
+}
+
+// Fermer le menu si on clique ailleurs.
+document.addEventListener("pointerdown", function(evenement) {
+    if (
+        menuMessage &&
+        !menuMessage.contains(evenement.target)
+    ) {
+        fermerMenuMessage();
+    }
+});
+
+// Fermer le menu avec Échap.
+document.addEventListener("keydown", function(evenement) {
+    if (evenement.key === "Escape") {
+        fermerMenuMessage();
+    }
+});
+
+// Fermer le menu lorsqu'on défile.
+listeMessages.addEventListener("scroll", fermerMenuMessage);
+
+window.addEventListener("resize", fermerMenuMessage);
+
+// Associer clic droit et appui prolongé à une bulle.
+function activerMenuSurMessage(bulle, message) {
+    if (message.sender_id !== utilisateurActuel.id) return;
+
+    // Ordinateur : clic droit.
+    bulle.addEventListener("contextmenu", function(evenement) {
+        evenement.preventDefault();
+
+        ouvrirMenuMessage(
+            message,
+            evenement.clientX,
+            evenement.clientY
+        );
+    });
+
+    // Téléphone : appui prolongé.
+    bulle.addEventListener("touchstart", function(evenement) {
+        appuiLongEffectue = false;
+
+        clearTimeout(minuterieAppuiLong);
+
+        const toucher = evenement.touches[0];
+        if (!toucher) return;
+
+        const x = toucher.clientX;
+        const y = toucher.clientY;
+
+        minuterieAppuiLong = setTimeout(function() {
+            appuiLongEffectue = true;
+            ouvrirMenuMessage(message, x, y);
+        }, 550);
+
+    }, { passive: true });
+
+    bulle.addEventListener("touchmove", function() {
+        clearTimeout(minuterieAppuiLong);
+    }, { passive: true });
+
+    bulle.addEventListener("touchend", function() {
+        clearTimeout(minuterieAppuiLong);
+    });
+
+    bulle.addEventListener("touchcancel", function() {
+        clearTimeout(minuterieAppuiLong);
+    });
+
+    // Empêcher un clic accidentel après l'appui prolongé.
+    bulle.addEventListener("click", function(evenement) {
+        if (appuiLongEffectue) {
+            evenement.preventDefault();
+            evenement.stopPropagation();
+            appuiLongEffectue = false;
+        }
+    }, true);
+}
+
+// ===== SUPPRIMER UN MESSAGE =====
+
+async function supprimerMessage(messageId, expediteurId) {
+    if (!utilisateurActuel) return;
+
+    if (expediteurId !== utilisateurActuel.id) {
+        alert("Vous ne pouvez supprimer que vos propres messages.");
+        return;
+    }
+
+    if (suppressionEnCours) return;
+
+    const confirmation = confirm(
+        "Voulez-vous vraiment supprimer ce message ?\n\n" +
+        "Il disparaîtra de votre conversation et de celle du destinataire."
+    );
+
+    if (!confirmation) return;
+
+    suppressionEnCours = true;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("Messages")
+            .delete()
+            .eq("id", messageId)
+            .eq("sender_id", utilisateurActuel.id)
+            .select("id");
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        if (!data || data.length === 0) {
+            alert(
+                "Le message n'a pas été supprimé. " +
+                "Vérifiez la politique DELETE dans Supabase."
+            );
+            return;
+        }
+
+        fermerMenuMessage();
+
+        dernierChatAffiche = null;
+        await rafraichir();
+
+    } catch (erreur) {
+        console.error("Erreur suppression :", erreur);
+
+        alert(
+            "Impossible de supprimer le message : " +
+            erreur.message
+        );
+
+    } finally {
+        suppressionEnCours = false;
+    }
+}
+
+// ===== AFFICHER LES MESSAGES =====
 
 async function chargerMessages() {
     if (!utilisateurActuel || !chatActif) return;
@@ -638,7 +883,7 @@ async function chargerMessages() {
             bulle.appendChild(contenu);
         }
 
-        // Image ou document
+        // Photo ou document
         if (message.fichier_chemin) {
             afficherPieceJointe(message, bulle, numeroAffichage);
         }
@@ -663,6 +908,10 @@ async function chargerMessages() {
 
             etat.title = message.lu ? "Vu" : "Envoyé";
             meta.appendChild(etat);
+
+            // Aucun bouton Supprimer visible ici.
+            // L'option est cachée dans le menu contextuel.
+            activerMenuSurMessage(bulle, message);
         }
 
         bulle.appendChild(meta);
@@ -683,7 +932,6 @@ boutonEnvoyer.addEventListener("click", async function() {
     const texte = messageInput.value.trim();
     const fichier = fichierSelectionne;
 
-    // On peut envoyer un texte, un fichier, ou les deux
     if (texte === "" && !fichier) return;
 
     if (!utilisateurActuel) {
@@ -704,7 +952,6 @@ boutonEnvoyer.addEventListener("click", async function() {
         boutonEnvoyer.disabled = true;
         boutonEnvoyer.title = "Envoi en cours…";
 
-        // 1. Envoyer la pièce jointe si elle existe
         if (fichier) {
             cheminFichier = await envoyerFichier(
                 fichier,
@@ -712,7 +959,6 @@ boutonEnvoyer.addEventListener("click", async function() {
             );
         }
 
-        // 2. Enregistrer le message dans Supabase
         const nouveauMessage = {
             sender_id: utilisateurActuel.id,
             receiver_id: destinataireId,
@@ -733,7 +979,6 @@ boutonEnvoyer.addEventListener("click", async function() {
             throw new Error(error.message);
         }
 
-        // 3. Vider les champs seulement après réussite
         messageInput.value = "";
         messageInput.style.height = "auto";
         annulerSelectionFichier();
@@ -753,10 +998,6 @@ boutonEnvoyer.addEventListener("click", async function() {
             erreur.message
         );
 
-        // Si le fichier a été envoyé mais pas le message,
-        // on signale l'échec sans effacer le texte.
-        // Le fichier non lié pourra être nettoyé plus tard.
-
     } finally {
         envoiEnCours = false;
         boutonEnvoyer.disabled = false;
@@ -764,9 +1005,18 @@ boutonEnvoyer.addEventListener("click", async function() {
     }
 });
 
-// Entrée pour envoyer, Maj + Entrée pour changer de ligne
+// ===== TOUCHE ENTRÉE =====
+
+// Entrée : envoyer
+// Maj + Entrée : retour à la ligne
+
 messageInput.addEventListener("keydown", (evenement) => {
-    if (evenement.key === "Enter" && !evenement.shiftKey) {
+    if (
+        evenement.key === "Enter" &&
+        !evenement.shiftKey &&
+        !evenement.isComposing &&
+        evenement.keyCode !== 229
+    ) {
         evenement.preventDefault();
         boutonEnvoyer.click();
     }
@@ -1151,11 +1401,8 @@ function verifierNotifications(messages) {
 
 initialiserConversation();
 
-// ===== AFFICHAGE TÉLÉPHONE : LISTE DES CONVERSATIONS / DISCUSSION =====
-// Ce bloc ne modifie aucune fonction ci-dessus.
-// Il ajoute ou retire seulement la classe "vueDiscussion" sur la page :
-// sur téléphone, la liste des conversations et la discussion s'affichent
-// chacune en pleine largeur. Sur ordinateur, cette classe n'a aucun effet.
+// ===== AFFICHAGE TÉLÉPHONE : LISTE / DISCUSSION =====
+
 (function () {
     const application = document.getElementById("application");
     const boutonRetourListe = document.getElementById("boutonRetourListe");
@@ -1172,8 +1419,6 @@ initialiserConversation();
         application.classList.remove("vueDiscussion");
     }
 
-    // Clic sur une conversation : on ouvre la discussion.
-    // Clic sur "Nouveau chat" : on note l'heure du clic.
     document.addEventListener("click", (evenement) => {
         if (evenement.target.closest(".itemChat")) {
             ouvrirDiscussion();
@@ -1182,15 +1427,19 @@ initialiserConversation();
         }
     }, true);
 
-    // Après "Nouveau chat", le contact choisi s'ouvre :
-    // le nom change en haut, on affiche alors la discussion.
     new MutationObserver(() => {
-        if (nouveauChatDemande && Date.now() - nouveauChatDemande < 30000) {
+        if (
+            nouveauChatDemande &&
+            Date.now() - nouveauChatDemande < 30000
+        ) {
             nouveauChatDemande = 0;
             ouvrirDiscussion();
         }
-    }).observe(titreChat, { childList: true, characterData: true, subtree: true });
+    }).observe(titreChat, {
+        childList: true,
+        characterData: true,
+        subtree: true
+    });
 
-    // Flèche ← : retour à la liste des conversations
     boutonRetourListe.addEventListener("click", afficherListe);
 })();
