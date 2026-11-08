@@ -102,7 +102,7 @@
                     </select>
                 </div>
 
-                <!-- Secours si l'API de trajet est indisponible -->
+                <!-- Distance de secours -->
                 <div class="champ">
                     <label for="distanceManuelle">
                         Distance manuelle (km) — facultatif
@@ -113,6 +113,23 @@
                         min="0.1"
                         step="0.1"
                         placeholder="Si le calcul automatique échoue">
+                </div>
+
+                <!-- Prix de secours -->
+                <div class="champ">
+                    <label for="prixManuel">
+                        Prix du carburant manuel ($/L) — facultatif
+                    </label>
+                    <input
+                        type="number"
+                        id="prixManuel"
+                        min="0.001"
+                        step="0.001"
+                        placeholder="Ex. : 1.650">
+                    <small>
+                        Utilisé seulement si aucun prix automatique
+                        n'est disponible.
+                    </small>
                 </div>
 
                 <button type="submit" id="boutonCalculer">
@@ -189,10 +206,10 @@
 <!-- Bibliothèque Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- Configuration Supabase existante -->
+<!-- Configuration Supabase -->
 <script src="supabase-config.js"></script>
 
-<!-- Recherche des stations de la binôme -->
+<!-- Recherche des stations -->
 <script src="stations.js"></script>
 
 <!-- Fonctionnalité Carburant -->

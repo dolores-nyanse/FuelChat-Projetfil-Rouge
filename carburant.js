@@ -37,15 +37,25 @@ const attributionStations =
 const boutonCalculer =
     document.getElementById("boutonCalculer");
 
+const champPrixManuel =
+    document.getElementById("prixManuel");
+
+const champTypeCarburant =
+    document.getElementById("typeCarburant");
+
 // ===== DONNÉES =====
 
 let distanceAutomatique = null;
 let dureeAutomatique = null;
 let prixAutomatique = null;
+
 let positionRecherche = null;
 let coordonneesDepart = null;
+
 let stationsDisponibles = [];
 let dernierTrajet = null;
+
+let carburantPrixAutomatique = null;
 
 let calculEnCours = false;
 let rechercheEnCours = false;
@@ -113,6 +123,90 @@ function obtenirCoordonnees(valeur) {
         longitude: longitude
     };
 }
+
+// ===== GESTION DES PRIX =====
+
+function obtenirPrixManuel() {
+    const saisie = champPrixManuel.value.trim();
+
+    if (saisie === "") {
+        return null;
+    }
+
+    const prix = Number(saisie);
+
+    if (
+        !nombreValide(prix) ||
+        prix <= 0
+    ) {
+        return null;
+    }
+
+    return prix;
+}
+
+function obtenirPrixApplicable() {
+    if (
+        nombreValide(prixAutomatique) &&
+        prixAutomatique > 0 &&
+        dernierTrajet !== null &&
+        carburantPrixAutomatique === dernierTrajet.carburant
+    ) {
+        return {
+            prix: prixAutomatique,
+            source: "automatique"
+        };
+    }
+
+    const prixManuel = obtenirPrixManuel();
+
+    if (prixManuel !== null) {
+        return {
+            prix: prixManuel,
+            source: "manuelle"
+        };
+    }
+
+    return {
+        prix: null,
+        source: null
+    };
+}
+
+function reinitialiserPrixAutomatique() {
+    prixAutomatique = null;
+    carburantPrixAutomatique = null;
+}
+
+// Actualiser le coût quand le prix manuel change.
+champPrixManuel.addEventListener(
+    "input",
+    function () {
+        actualiserResultatTrajet();
+    }
+);
+
+// Un prix d'un carburant ne doit pas être
+// réutilisé pour un autre type de carburant.
+champTypeCarburant.addEventListener(
+    "change",
+    function () {
+        reinitialiserPrixAutomatique();
+        stationsDisponibles = [];
+
+        resultatsStations.replaceChildren();
+        attributionStations.hidden = true;
+
+        afficherStatut(
+            "Choisissez votre recherche de stations."
+        );
+
+        if (dernierTrajet !== null) {
+            dernierTrajet.carburant = champTypeCarburant.value;
+            actualiserResultatTrajet();
+        }
+    }
+);
 
 // ===== CALCUL AUTOMATIQUE DU TRAJET =====
 
@@ -193,7 +287,7 @@ formulaireTrajet.addEventListener(
         );
 
         const typeCarburant =
-            document.getElementById("typeCarburant").value;
+            champTypeCarburant.value;
 
         const distanceSaisie =
             document.getElementById("distanceManuelle").value.trim();
@@ -225,14 +319,17 @@ formulaireTrajet.addEventListener(
         calculEnCours = true;
         boutonCalculer.disabled = true;
 
-        afficherResultat("Calcul du trajet en cours...");
+        afficherResultat(
+            "Calcul du trajet en cours..."
+        );
 
-        // Ne pas réutiliser la distance d'un ancien trajet.
         distanceAutomatique = null;
         dureeAutomatique = null;
         coordonneesDepart = null;
         dernierTrajet = null;
-        prixAutomatique = null;
+
+        // Ne pas conserver le prix d'un ancien trajet.
+        reinitialiserPrixAutomatique();
 
         let distance = null;
         let sourceDistance = "automatique";
@@ -334,25 +431,27 @@ function actualiserResultatTrajet() {
             dureeAutomatique.toFixed(0) + " min";
     }
 
-    if (
-        nombreValide(prixAutomatique) &&
-        prixAutomatique > 0
-    ) {
+    const prixApplicable = obtenirPrixApplicable();
+
+    if (prixApplicable.prix !== null) {
+
         const cout = calculerCout(
             trajet.litres,
-            prixAutomatique
+            prixApplicable.prix
         );
 
         resultat +=
             "\nPrix utilisé : " +
-            prixAutomatique.toFixed(3) + " $/L" +
+            prixApplicable.prix.toFixed(3) + " $/L" +
+            "\nSource du prix : " +
+            prixApplicable.source +
             "\nCoût estimé : " +
             cout.toFixed(2) + " $";
 
     } else {
         resultat +=
             "\nCoût estimé : indisponible " +
-            "(prix du carburant non reçu).";
+            "(aucun prix du carburant disponible).";
     }
 
     afficherResultat(resultat);
@@ -397,6 +496,7 @@ boutonPosition.addEventListener(
             function (erreur) {
 
                 boutonPosition.disabled = false;
+                positionRecherche = null;
 
                 if (erreur.code === 1) {
                     afficherStatut(
@@ -577,7 +677,7 @@ boutonStations.addEventListener(
         }
 
         const carburant =
-            document.getElementById("typeCarburant").value;
+            champTypeCarburant.value;
 
         const rayon = Number(rayonRecherche.value);
 
@@ -606,8 +706,6 @@ boutonStations.addEventListener(
             return;
         }
 
-        // Priorité à la position GPS.
-        // Sinon, coordonnées du dernier trajet automatique.
         const position =
             positionRecherche || coordonneesDepart;
 
@@ -625,6 +723,13 @@ boutonStations.addEventListener(
 
         resultatsStations.replaceChildren();
         attributionStations.hidden = true;
+
+        // Une nouvelle recherche ne doit pas
+        // conserver le prix de l'ancienne.
+        reinitialiserPrixAutomatique();
+        stationsDisponibles = [];
+
+        actualiserResultatTrajet();
 
         afficherStatut(
             "Recherche des stations-service en cours..."
@@ -652,8 +757,6 @@ boutonStations.addEventListener(
                 parametres
             );
 
-            // stations.js appelle déjà definirStations().
-            // On vérifie simplement le résultat reçu.
             if (!Array.isArray(stations)) {
                 throw new Error(
                     "La liste des stations est invalide."
@@ -702,8 +805,6 @@ function trouverPrixDisponible(stations) {
         return null;
     }
 
-    // Utiliser le prix le moins élevé parmi
-    // les stations retournées pour ce carburant.
     return Math.min(...prixValides);
 }
 
@@ -735,6 +836,9 @@ window.FuelChatCarburant = {
             prix > 0
         ) {
             prixAutomatique = prix;
+            carburantPrixAutomatique =
+                champTypeCarburant.value;
+
             actualiserResultatTrajet();
         }
     },
@@ -757,7 +861,7 @@ window.FuelChatCarburant = {
             if (prix !== null) {
                 this.definirPrix(prix);
             } else {
-                prixAutomatique = null;
+                reinitialiserPrixAutomatique();
                 actualiserResultatTrajet();
             }
         }
@@ -770,7 +874,7 @@ window.FuelChatCarburant = {
             depart:
                 document.getElementById("depart").value.trim(),
             carburant:
-                document.getElementById("typeCarburant").value,
+                champTypeCarburant.value,
             rayon: Number(rayonRecherche.value),
             classement: classementStations.value
         };
