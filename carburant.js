@@ -1,12 +1,8 @@
 
 /*
     FuelChat - Fonctionnalité Carburant
-
-    Calcul du trajet, recherche et affichage
-    des stations-service.
-
-    Les données réelles proviendront des API
-    lors de leur intégration.
+    Calcul du trajet et recherche des stations-service
+    Connexion aux fonctions Supabase
 */
 
 // ===== ÉLÉMENTS HTML =====
@@ -38,15 +34,21 @@ const resultatsStations =
 const attributionStations =
     document.getElementById("attributionStations");
 
+const boutonCalculer =
+    document.getElementById("boutonCalculer");
+
 // ===== DONNÉES =====
 
 let distanceAutomatique = null;
 let dureeAutomatique = null;
 let prixAutomatique = null;
 let positionRecherche = null;
+let coordonneesDepart = null;
 let stationsDisponibles = [];
-
 let dernierTrajet = null;
+
+let calculEnCours = false;
+let rechercheEnCours = false;
 
 // ===== FONCTIONS UTILES =====
 
@@ -66,96 +68,239 @@ function calculerCout(litres, prix) {
 function afficherResultat(message) {
     resultatTrajet.hidden = false;
     resultatTrajet.textContent = message;
+    resultatTrajet.style.whiteSpace = "pre-line";
 }
 
 function afficherStatut(message) {
     statutStations.textContent = message;
 }
 
-// ===== CALCUL DU TRAJET =====
+function obtenirClientSupabase() {
+    if (
+        typeof supabaseClient === "undefined" ||
+        !supabaseClient ||
+        !supabaseClient.functions
+    ) {
+        throw new Error(
+            "La connexion Supabase n'est pas disponible."
+        );
+    }
 
-formulaireTrajet.addEventListener("submit", function (evenement) {
+    return supabaseClient;
+}
 
-    evenement.preventDefault();
+function obtenirCoordonnees(valeur) {
+    if (!valeur || typeof valeur !== "object") {
+        return null;
+    }
 
-    const depart =
-        document.getElementById("depart").value.trim();
+    const latitude = Number(valeur.latitude);
+    const longitude = Number(valeur.longitude);
 
-    const destination =
-        document.getElementById("destination").value.trim();
+    if (
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude) ||
+        latitude < -90 ||
+        latitude > 90 ||
+        longitude < -180 ||
+        longitude > 180
+    ) {
+        return null;
+    }
 
-    const consommation = Number(
-        document.getElementById("consommation").value
+    return {
+        latitude: latitude,
+        longitude: longitude
+    };
+}
+
+// ===== CALCUL AUTOMATIQUE DU TRAJET =====
+
+async function calculerTrajetAPI(depart, destination) {
+    const client = obtenirClientSupabase();
+
+    const { data, error } = await client.functions.invoke(
+        "calculer-trajet",
+        {
+            body: {
+                depart: depart,
+                destination: destination
+            }
+        }
     );
 
-    const typeCarburant =
-        document.getElementById("typeCarburant").value;
-
-    const distanceSaisie =
-        document.getElementById("distanceManuelle").value.trim();
-
-    if (depart === "" || destination === "") {
-        afficherResultat(
-            "Veuillez entrer le départ et la destination."
+    if (error) {
+        throw new Error(
+            "Le service de calcul automatique est indisponible."
         );
-        return;
     }
 
-    if (!nombreValide(consommation) || consommation <= 0) {
-        afficherResultat(
-            "Veuillez entrer une consommation valide."
+    if (!data || typeof data !== "object") {
+        throw new Error(
+            "La réponse du service de trajet est invalide."
         );
-        return;
     }
 
-    if (typeCarburant === "") {
-        afficherResultat(
-            "Veuillez choisir un type de carburant."
+    const distance = data.distanceKm;
+    const duree = data.dureeMinutes;
+
+    if (
+        !nombreValide(distance) ||
+        distance <= 0
+    ) {
+        throw new Error(
+            "Le service n'a pas renvoyé une distance valide."
         );
-        return;
     }
 
-    let distance = distanceAutomatique;
-    let sourceDistance = "automatique";
+    if (
+        !nombreValide(duree) ||
+        duree < 0
+    ) {
+        throw new Error(
+            "Le service n'a pas renvoyé une durée valide."
+        );
+    }
 
-    if (distance === null) {
+    return {
+        distanceKm: distance,
+        dureeMinutes: duree,
+        coordonneesDepart:
+            obtenirCoordonnees(data.coordonneesDepart)
+    };
+}
 
-        if (distanceSaisie === "") {
+// ===== FORMULAIRE DE TRAJET =====
+
+formulaireTrajet.addEventListener(
+    "submit",
+    async function (evenement) {
+
+        evenement.preventDefault();
+
+        if (calculEnCours) {
+            return;
+        }
+
+        const depart =
+            document.getElementById("depart").value.trim();
+
+        const destination =
+            document.getElementById("destination").value.trim();
+
+        const consommation = Number(
+            document.getElementById("consommation").value
+        );
+
+        const typeCarburant =
+            document.getElementById("typeCarburant").value;
+
+        const distanceSaisie =
+            document.getElementById("distanceManuelle").value.trim();
+
+        if (depart === "" || destination === "") {
             afficherResultat(
-                "Le calcul automatique n'est pas encore disponible.\n" +
-                "Veuillez entrer une distance manuelle."
+                "Veuillez entrer le départ et la destination."
             );
             return;
         }
 
-        distance = Number(distanceSaisie);
-        sourceDistance = "manuelle";
-    }
+        if (
+            !nombreValide(consommation) ||
+            consommation <= 0
+        ) {
+            afficherResultat(
+                "Veuillez entrer une consommation valide."
+            );
+            return;
+        }
 
-    if (!nombreValide(distance) || distance <= 0) {
-        afficherResultat(
-            "Veuillez entrer une distance valide."
+        if (typeCarburant === "") {
+            afficherResultat(
+                "Veuillez choisir un type de carburant."
+            );
+            return;
+        }
+
+        calculEnCours = true;
+        boutonCalculer.disabled = true;
+
+        afficherResultat("Calcul du trajet en cours...");
+
+        // Ne pas réutiliser la distance d'un ancien trajet.
+        distanceAutomatique = null;
+        dureeAutomatique = null;
+        coordonneesDepart = null;
+        dernierTrajet = null;
+        prixAutomatique = null;
+
+        let distance = null;
+        let sourceDistance = "automatique";
+        let erreurAutomatique = "";
+
+        try {
+            const trajet = await calculerTrajetAPI(
+                depart,
+                destination
+            );
+
+            distanceAutomatique = trajet.distanceKm;
+            dureeAutomatique = trajet.dureeMinutes;
+            coordonneesDepart = trajet.coordonneesDepart;
+
+            distance = distanceAutomatique;
+
+        } catch (erreur) {
+            console.error(
+                "Calcul automatique du trajet :",
+                erreur
+            );
+
+            erreurAutomatique = erreur.message;
+
+            if (distanceSaisie !== "") {
+                distance = Number(distanceSaisie);
+                sourceDistance = "manuelle";
+            }
+        }
+
+        if (
+            !nombreValide(distance) ||
+            distance <= 0
+        ) {
+            afficherResultat(
+                "Impossible de calculer automatiquement le trajet.\n" +
+                erreurAutomatique + "\n" +
+                "Veuillez saisir une distance manuelle " +
+                "pour continuer."
+            );
+
+            calculEnCours = false;
+            boutonCalculer.disabled = false;
+            return;
+        }
+
+        const litres = calculerLitres(
+            distance,
+            consommation
         );
-        return;
+
+        dernierTrajet = {
+            depart: depart,
+            destination: destination,
+            distance: distance,
+            consommation: consommation,
+            carburant: typeCarburant,
+            litres: litres,
+            sourceDistance: sourceDistance
+        };
+
+        actualiserResultatTrajet();
+
+        calculEnCours = false;
+        boutonCalculer.disabled = false;
     }
-
-    const litres = calculerLitres(
-        distance,
-        consommation
-    );
-
-    dernierTrajet = {
-        depart: depart,
-        destination: destination,
-        distance: distance,
-        consommation: consommation,
-        carburant: typeCarburant,
-        litres: litres,
-        sourceDistance: sourceDistance
-    };
-
-    actualiserResultatTrajet();
-});
+);
 
 // ===== AFFICHAGE DU TRAJET =====
 
@@ -170,7 +315,8 @@ function actualiserResultatTrajet() {
     let resultat =
         "Trajet : " + trajet.depart +
         " → " + trajet.destination + "\n" +
-        "Distance : " + trajet.distance.toFixed(1) + " km\n" +
+        "Distance : " +
+        trajet.distance.toFixed(1) + " km\n" +
         "Source de la distance : " +
         trajet.sourceDistance + "\n" +
         "Carburant : " + trajet.carburant + "\n" +
@@ -192,7 +338,6 @@ function actualiserResultatTrajet() {
         nombreValide(prixAutomatique) &&
         prixAutomatique > 0
     ) {
-
         const cout = calculerCout(
             trajet.litres,
             prixAutomatique
@@ -205,7 +350,6 @@ function actualiserResultatTrajet() {
             cout.toFixed(2) + " $";
 
     } else {
-
         resultat +=
             "\nCoût estimé : indisponible " +
             "(prix du carburant non reçu).";
@@ -216,57 +360,62 @@ function actualiserResultatTrajet() {
 
 // ===== GÉOLOCALISATION =====
 
-boutonPosition.addEventListener("click", function () {
+boutonPosition.addEventListener(
+    "click",
+    function () {
 
-    if (!navigator.geolocation) {
-        afficherStatut(
-            "La géolocalisation n'est pas disponible."
-        );
-        return;
-    }
-
-    boutonPosition.disabled = true;
-    afficherStatut("Recherche de votre position...");
-
-    navigator.geolocation.getCurrentPosition(
-
-        function (position) {
-
-            positionRecherche = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            };
-
-            boutonPosition.disabled = false;
-
+        if (!navigator.geolocation) {
             afficherStatut(
-                "Position GPS obtenue. " +
-                "La recherche des stations sera disponible " +
-                "après la connexion à l'API."
+                "La géolocalisation n'est pas disponible."
             );
-        },
-
-        function (erreur) {
-
-            boutonPosition.disabled = false;
-
-            if (erreur.code === 1) {
-                afficherStatut(
-                    "L'accès à la position a été refusé."
-                );
-            } else {
-                afficherStatut(
-                    "Impossible d'obtenir votre position."
-                );
-            }
-        },
-
-        {
-            enableHighAccuracy: false,
-            timeout: 10000
+            return;
         }
-    );
-});
+
+        boutonPosition.disabled = true;
+
+        afficherStatut(
+            "Recherche de votre position..."
+        );
+
+        navigator.geolocation.getCurrentPosition(
+
+            function (position) {
+
+                positionRecherche = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+
+                boutonPosition.disabled = false;
+
+                afficherStatut(
+                    "Position GPS obtenue. " +
+                    "Vous pouvez maintenant rechercher les stations."
+                );
+            },
+
+            function (erreur) {
+
+                boutonPosition.disabled = false;
+
+                if (erreur.code === 1) {
+                    afficherStatut(
+                        "L'accès à la position a été refusé."
+                    );
+                } else {
+                    afficherStatut(
+                        "Impossible d'obtenir votre position."
+                    );
+                }
+            },
+
+            {
+                enableHighAccuracy: false,
+                timeout: 10000
+            }
+        );
+    }
+);
 
 // ===== CLASSEMENT DES STATIONS =====
 
@@ -279,10 +428,12 @@ function classerStations(stations, classement) {
         copie.sort(function (a, b) {
 
             const prixA = nombreValide(a.prix)
-                ? a.prix : Infinity;
+                ? a.prix
+                : Infinity;
 
             const prixB = nombreValide(b.prix)
-                ? b.prix : Infinity;
+                ? b.prix
+                : Infinity;
 
             return prixA - prixB;
         });
@@ -292,19 +443,15 @@ function classerStations(stations, classement) {
         copie.sort(function (a, b) {
 
             const distanceA = nombreValide(a.distance)
-                ? a.distance : Infinity;
+                ? a.distance
+                : Infinity;
 
             const distanceB = nombreValide(b.distance)
-                ? b.distance : Infinity;
+                ? b.distance
+                : Infinity;
 
             return distanceA - distanceB;
         });
-
-    } else {
-
-        // Le classement "value" sera calculé
-        // par Gas Quebec lors de l'intégration.
-        // On conserve l'ordre fourni par l'API.
     }
 
     return copie;
@@ -316,8 +463,10 @@ function afficherStations(stations, classement) {
 
     resultatsStations.replaceChildren();
 
-    if (!Array.isArray(stations) || stations.length === 0) {
-
+    if (
+        !Array.isArray(stations) ||
+        stations.length === 0
+    ) {
         afficherStatut(
             "Aucune station disponible pour cette recherche."
         );
@@ -330,7 +479,8 @@ function afficherStations(stations, classement) {
         classerStations(stations, classement);
 
     afficherStatut(
-        stationsClassees.length + " station(s) trouvée(s)."
+        stationsClassees.length +
+        " station(s) trouvée(s)."
     );
 
     attributionStations.hidden = false;
@@ -341,19 +491,17 @@ function afficherStations(stations, classement) {
         carte.className = "carte";
 
         const titre = document.createElement("h3");
+
         titre.textContent =
             station.nom || "Station-service";
 
         carte.appendChild(titre);
 
-        // Indication de la recommandation
-        // uniquement pour un classement fourni par l'API
         if (
             classement === "value" &&
             index === 0 &&
             station.recommandee === true
         ) {
-
             const recommandation =
                 document.createElement("p");
 
@@ -367,11 +515,13 @@ function afficherStations(stations, classement) {
         }
 
         const adresse = document.createElement("p");
+
         adresse.textContent =
             "Adresse : " +
             (station.adresse || "Non disponible");
 
         const distance = document.createElement("p");
+
         distance.textContent =
             "Distance : " +
             (
@@ -381,6 +531,7 @@ function afficherStations(stations, classement) {
             );
 
         const prix = document.createElement("p");
+
         prix.textContent =
             "Prix : " +
             (
@@ -390,6 +541,7 @@ function afficherStations(stations, classement) {
             );
 
         const date = document.createElement("p");
+
         date.textContent =
             "Mise à jour : " +
             (station.dateMiseAJour || "Non disponible");
@@ -416,69 +568,172 @@ function afficherStations(stations, classement) {
 
 // ===== RECHERCHE DES STATIONS =====
 
-boutonStations.addEventListener("click", function () {
+boutonStations.addEventListener(
+    "click",
+    async function () {
 
-    const carburant =
-        document.getElementById("typeCarburant").value;
+        if (rechercheEnCours) {
+            return;
+        }
 
-    const rayon = Number(rayonRecherche.value);
-    const classement = classementStations.value;
+        const carburant =
+            document.getElementById("typeCarburant").value;
 
-    if (carburant === "") {
-        afficherStatut(
-            "Veuillez choisir un type de carburant."
-        );
-        return;
-    }
+        const rayon = Number(rayonRecherche.value);
 
-    if (![5, 10, 20].includes(rayon)) {
-        afficherStatut(
-            "Veuillez choisir un rayon valide."
-        );
-        return;
-    }
+        const classement = classementStations.value;
 
-    if (!["value", "price", "distance"].includes(classement)) {
-        afficherStatut(
-            "Veuillez choisir un classement valide."
-        );
-        return;
-    }
+        if (carburant === "") {
+            afficherStatut(
+                "Veuillez choisir un type de carburant."
+            );
+            return;
+        }
 
-    if (stationsDisponibles.length === 0) {
+        if (![5, 10, 20].includes(rayon)) {
+            afficherStatut(
+                "Veuillez choisir un rayon valide."
+            );
+            return;
+        }
+
+        if (
+            !["value", "price", "distance"].includes(classement)
+        ) {
+            afficherStatut(
+                "Veuillez choisir un classement valide."
+            );
+            return;
+        }
+
+        // Priorité à la position GPS.
+        // Sinon, coordonnées du dernier trajet automatique.
+        const position =
+            positionRecherche || coordonneesDepart;
+
+        if (!position) {
+            afficherStatut(
+                "Veuillez utiliser votre position GPS " +
+                "ou calculer automatiquement un trajet " +
+                "avant de rechercher les stations."
+            );
+            return;
+        }
+
+        rechercheEnCours = true;
+        boutonStations.disabled = true;
 
         resultatsStations.replaceChildren();
         attributionStations.hidden = true;
 
         afficherStatut(
-            "La recherche des stations n'est pas encore " +
-            "connectée à Gas Quebec."
+            "Recherche des stations-service en cours..."
         );
 
-        return;
+        try {
+            const client = obtenirClientSupabase();
+
+            if (typeof window.chargerStations !== "function") {
+                throw new Error(
+                    "Le fichier stations.js n'est pas chargé."
+                );
+            }
+
+            const parametres = {
+                latitude: position.latitude,
+                longitude: position.longitude,
+                rayon: rayon,
+                carburant: carburant,
+                classement: classement
+            };
+
+            const stations = await window.chargerStations(
+                client,
+                parametres
+            );
+
+            // stations.js appelle déjà definirStations().
+            // On vérifie simplement le résultat reçu.
+            if (!Array.isArray(stations)) {
+                throw new Error(
+                    "La liste des stations est invalide."
+                );
+            }
+
+        } catch (erreur) {
+
+            console.error(
+                "Recherche des stations :",
+                erreur
+            );
+
+            resultatsStations.replaceChildren();
+            attributionStations.hidden = true;
+
+            afficherStatut(
+                "Impossible de récupérer les stations-service. " +
+                erreur.message
+            );
+
+        } finally {
+            rechercheEnCours = false;
+            boutonStations.disabled = false;
+        }
+    }
+);
+
+// ===== CHOISIR UN PRIX DISPONIBLE =====
+
+function trouverPrixDisponible(stations) {
+
+    if (!Array.isArray(stations)) {
+        return null;
     }
 
-    afficherStations(stationsDisponibles, classement);
-});
+    const prixValides = stations
+        .map(function (station) {
+            return station.prix;
+        })
+        .filter(function (prix) {
+            return nombreValide(prix) && prix > 0;
+        });
 
-// ===== CONNEXION FUTURE AUX API =====
+    if (prixValides.length === 0) {
+        return null;
+    }
+
+    // Utiliser le prix le moins élevé parmi
+    // les stations retournées pour ce carburant.
+    return Math.min(...prixValides);
+}
+
+// ===== CONNEXION AVEC STATIONS.JS =====
 
 window.FuelChatCarburant = {
 
     definirTrajet: function (distance, duree) {
 
-        if (nombreValide(distance) && distance > 0) {
+        if (
+            nombreValide(distance) &&
+            distance > 0
+        ) {
             distanceAutomatique = distance;
         }
 
-        if (nombreValide(duree) && duree >= 0) {
+        if (
+            nombreValide(duree) &&
+            duree >= 0
+        ) {
             dureeAutomatique = duree;
         }
     },
 
     definirPrix: function (prix) {
 
-        if (nombreValide(prix) && prix > 0) {
+        if (
+            nombreValide(prix) &&
+            prix > 0
+        ) {
             prixAutomatique = prix;
             actualiserResultatTrajet();
         }
@@ -494,6 +749,17 @@ window.FuelChatCarburant = {
                 stationsDisponibles,
                 classementStations.value
             );
+
+            const prix = trouverPrixDisponible(
+                stationsDisponibles
+            );
+
+            if (prix !== null) {
+                this.definirPrix(prix);
+            } else {
+                prixAutomatique = null;
+                actualiserResultatTrajet();
+            }
         }
     },
 
@@ -501,8 +767,10 @@ window.FuelChatCarburant = {
 
         return {
             position: positionRecherche,
-            depart: document.getElementById("depart").value.trim(),
-            carburant: document.getElementById("typeCarburant").value,
+            depart:
+                document.getElementById("depart").value.trim(),
+            carburant:
+                document.getElementById("typeCarburant").value,
             rayon: Number(rayonRecherche.value),
             classement: classementStations.value
         };
