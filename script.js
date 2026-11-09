@@ -394,36 +394,46 @@ async function ouvrirChat(id) {
     afficherListeChats();
 
     await chargerMessages();
-}
+};
 
-boutonNewChat.addEventListener("click", async function() {
+
+const zoneNouveauChat = document.getElementById("zoneNouveauChat");
+const pseudoNouveauChat = document.getElementById("pseudoNouveauChat");
+const confirmerNouveauChat = document.getElementById("confirmerNouveauChat");
+
+// Afficher ou masquer le formulaire
+boutonNewChat.addEventListener("click", function() {
+    zoneNouveauChat.hidden = !zoneNouveauChat.hidden;
+
+    if (!zoneNouveauChat.hidden) {
+        pseudoNouveauChat.focus();
+    }
+});
+
+// Ouvrir une conversation à partir du nom d'utilisatuer 
+confirmerNouveauChat.addEventListener("click", async function() {
     await chargerContacts();
 
-    if (chats.length === 0) {
-        alert("Ajoutez d'abord un contact dans la page Contacts.");
+    const pseudoRecherche = pseudoNouveauChat.value.trim().toLowerCase();
+
+    if (pseudoRecherche === "") {
+        alert("Veuillez saisir un nom d'utilisateur.");
         return;
     }
 
-    let choix = "Choisissez un contact :\n";
+    const contact = chats.find(
+        chat => chat.nom.toLowerCase() === pseudoRecherche
+    );
 
-    for (let i = 0; i < chats.length; i++) {
-        choix += (i + 1) + ". " + chats[i].nom + "\n";
-    }
-
-    const reponse = prompt(choix);
-
-    if (reponse === null) return;
-
-    const numero = Number(reponse);
-
-    if (!Number.isInteger(numero) ||
-        numero < 1 ||
-        numero > chats.length) {
-        alert("Choix invalide.");
+    if (!contact) {
+        alert("Ce nom d'utilisateur ne figure pas dans vos contacts.");
         return;
     }
 
-    await ouvrirChat(chats[numero - 1].id);
+    await ouvrirChat(contact.id);
+
+    pseudoNouveauChat.value = "";
+    zoneNouveauChat.hidden = true;
 });
 
 // ===== PIÈCES JOINTES =====

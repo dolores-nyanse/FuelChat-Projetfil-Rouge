@@ -410,3 +410,57 @@ html[data-theme="clair"] .message-recu .documentMessage {
 
 /* ===== Affichage téléphone (style de la maquette) ===== */
 /*
+/* Formulaire de création d'une conversation */
+
+#zoneNouveauChat {
+    margin-top: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #10243b;
+    border: 1px solid #315477;
+    border-radius: 14px;
+}
+
+#zoneNouveauChat[hidden] {
+    display: none;
+}
+
+#zoneNouveauChat label {
+    display: block;
+    color: #e5f1ff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+#pseudoNouveauChat {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    background: #07182d;
+    color: #ffffff;
+    border: 1px solid #315477;
+    border-radius: 10px;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+#pseudoNouveauChat::placeholder {
+    color: #91a9c2;
+}
+
+#confirmerNouveauChat {
+    width: 100%;
+    padding: 12px;
+    background: #168deb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#confirmerNouveauChat:hover {
+    background: #0878d4;
+}
