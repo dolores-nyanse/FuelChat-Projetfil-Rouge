@@ -215,6 +215,28 @@ Cette table gère les demandes de contact.
 
 Une contrainte empêche plusieurs invitations identiques en attente entre le même expéditeur et le même destinataire.
 
+### Table `Messages`
+
+Cette table, créée dans le cadre du développement de la messagerie, permet d'enregistrer les messages échangés entre les utilisateurs de FuelChat.
+
+| Colonne | Type | Rôle |
+|---|---|---|
+| `id` | `int8` | Identifiant unique du message et clé primaire |
+| `sender_id` | `uuid` | Identifiant de l'expéditeur |
+| `receiver_id` | `uuid` | Identifiant du destinataire |
+| `content` | `text` | Contenu textuel du message |
+| `created_at` | `timestamp` | Date et heure du message |
+| `lu` | `bool` | Indique si le message a été lu |
+| `fichier_chemin` | `text` | Chemin du fichier associé au message |
+| `fichier_nom` | `text` | Nom du fichier joint |
+| `fichier_type` | `text` | Type du fichier joint |
+
+La messagerie utilise les identifiants `sender_id` et `receiver_id` pour associer chaque message à son expéditeur et à son destinataire.
+
+Cette structure permet notamment de gérer les échanges entre utilisateurs et de conserver l'historique des messages dans Supabase.
+
+Les colonnes supplémentaires permettent également de gérer l'état de lecture des messages et d'associer des fichiers aux échanges.
+
 ### Réponse aux invitations
 
 La fonction PostgreSQL `repondre_invitation` est prévue pour traiter les réponses.
