@@ -301,9 +301,9 @@ Le projet a été réalisé en équipe, avec une répartition des tâches entre 
 
 ### dolores-nyanse
 
-- **Authentification et comptes utilisateurs :** développement de la page d'accueil, des formulaires d'inscription et de connexion, ainsi que de leur intégration à Supabase Auth.
+- **Authentification et comptes utilisateurs :** développement de la page d'accueil, des formulaires d'inscription et de connexion, ainsi que de leur intégration à Supabase Auth avec une creation de la table profil.
 
-- **Gestion des contacts :** conception et développement de la page Contact, incluant sa structure HTML, sa mise en forme CSS et sa logique JavaScript.
+- **Gestion des contacts :** conception et développement de la page Contact, incluant sa structure HTML, sa mise en forme CSS, sa logique JavaScript et la creation des tables contact et inivitations contact.
 
 - **Base de données et sécurité :** création et configuration du projet Supabase, mise en place des profils utilisateurs, des relations entre les tables, des déclencheurs SQL et des politiques RLS.
 
@@ -314,7 +314,7 @@ Le projet a été réalisé en équipe, avec une répartition des tâches entre 
 
 ### Deborah Yassi
 
-- **Messagerie :** conception et développement de la page Conversations, incluant sa structure HTML, sa mise en forme CSS et sa logique JavaScript pour la gestion des échanges entre utilisateurs.
+- **Messagerie :** conception et développement de la page Conversations, incluant sa structure HTML, sa mise en forme CSS, sa logique JavaScript et la création de la table Messages pour la gestion des échanges entre utilisateurs.
 
 - **Base de données de la messagerie** : création et configuration des tables Supabase nécessaires à l'enregistrement et à la gestion des conversations et des messages.
 
