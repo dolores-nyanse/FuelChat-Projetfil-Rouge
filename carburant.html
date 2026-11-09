@@ -31,7 +31,6 @@
         </div>
 
         <nav class="menu">
-            <a class="lienMenu" href="index.html">Accueil</a>
             <a class="lienMenu" href="conversation.html">Chats</a>
             <a class="lienMenu" href="contacts.html">Contacts</a>
             <a class="lienMenu actif" href="carburant.html">Carburant</a>
@@ -95,42 +94,14 @@
                         Type de carburant
                     </label>
                     <select id="typeCarburant" required>
-                        <option value="">Choisir un carburant</option>
-                        <option value="ordinaire">Ordinaire</option>
-                        <option value="super">Super</option>
-                        <option value="diesel">Diesel</option>
-                    </select>
+    <option value="" disabled selected hidden> Choisir un carburant </option>
+    <option value="ordinaire">Ordinaire</option>
+    <option value="super">Super</option>
+    <option value="diesel">Diesel</option>
+</select>
                 </div>
 
-                <!-- Distance de secours -->
-                <div class="champ">
-                    <label for="distanceManuelle">
-                        Distance manuelle (km) — facultatif
-                    </label>
-                    <input
-                        type="number"
-                        id="distanceManuelle"
-                        min="0.1"
-                        step="0.1"
-                        placeholder="Si le calcul automatique échoue">
-                </div>
-
-                <!-- Prix de secours -->
-                <div class="champ">
-                    <label for="prixManuel">
-                        Prix du carburant manuel ($/L) — facultatif
-                    </label>
-                    <input
-                        type="number"
-                        id="prixManuel"
-                        min="0.001"
-                        step="0.001"
-                        placeholder="Ex. : 1.650">
-                    <small>
-                        Utilisé seulement si aucun prix automatique
-                        n'est disponible.
-                    </small>
-                </div>
+                
 
                 <button type="submit" id="boutonCalculer">
                     Calculer mon trajet
@@ -215,5 +186,34 @@
 <!-- Fonctionnalité Carburant -->
 <script src="carburant.js"></script>
 
+<!-- Distance de secours -->
+                <div class="champ">
+                    <label for="distanceManuelle">
+                        Distance manuelle (km) 
+                    </label>
+                    <input
+                        type="number"
+                        id="distanceManuelle"
+                        min="0.1"
+                        step="0.1"
+                        placeholder="Si le calcul automatique est indisponible">
+                </div>
+
+                <!-- Prix de secours -->
+                <div class="champ">
+                    <label for="prixManuel">
+                        Prix du carburant manuel ($/L)
+                    </label>
+                    <input
+                        type="number"
+                        id="prixManuel"
+                        min="0.001"
+                        step="0.001"
+                        placeholder="Ex. : 1.650">
+                    <small>
+                        Utilisé seulement si aucun prix automatique
+                        n'est disponible.
+                    </small>
+                </div>
 </body>
 </html>

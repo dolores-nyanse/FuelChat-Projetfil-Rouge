@@ -30,6 +30,8 @@ const champRecherche = document.getElementById("rechercheContact");
 const boutonRecherche = document.getElementById("boutonRecherche");
 const resultatsRecherche = document.getElementById("resultatsRecherche");
 const listeContacts = document.getElementById("listecontacts");
+const invitationsRecues = document.getElementById("invitationsRecues");
+const invitationsEnvoyees = document.getElementById("invitationsEnvoyees");
 
 // Identifiant de l'utilisateur connecté
 let utilisateurActuel = null;
@@ -43,6 +45,8 @@ async function initialiserContacts() {
     }
 
     await afficherContacts();
+    await afficherInvitationsEnvoyees();
+    await afficherInvitationsRecues();
 }
 
 // Rechercher un utilisateur par son nom
@@ -72,35 +76,86 @@ async function rechercherContact() {
         return;
     }
 
+     // Récupérer les identifiants des contacts déjà ajoutés
+const { data: contactsExistants, error: erreurContacts } =
+    await supabaseClient
+        .from("contacts")
+        .select("contact_id")
+        .eq("user_id", utilisateurActuel.id);
+
+if (erreurContacts) {
+    console.error(erreurContacts);
+    resultatsRecherche.textContent =
+        "Impossible de vérifier les contacts existants.";
+    return;
+}
+
+const idsContacts = new Set(
+    contactsExistants.map(contact => contact.contact_id)
+);
+
     for (const profil of data) {
 
-        // Ne pas proposer son propre compte
-        if (profil.id === utilisateurActuel.id) {
-            continue;
-        }
-
         const ligne = document.createElement("p");
-        const nom = document.createElement("span");
-        const boutonAjouter = document.createElement("button");
+const nom = document.createElement("span");
 
-        nom.textContent = profil.username + " ";
-        boutonAjouter.textContent = "Ajouter";
-        boutonAjouter.type = "button";
+nom.textContent = profil.username + " ";
+ligne.appendChild(nom);
 
-        boutonAjouter.addEventListener("click", async function() {
-            boutonAjouter.disabled = true;
-            await ajouterContact(profil.id);
-            boutonAjouter.disabled = false;
-        });
+if (idsContacts.has(profil.id)) {
+    // L'utilisateur est déjà dans les contacts
+    const statut = document.createElement("span");
+    statut.textContent = "✓ Déjà dans vos contacts";
+    ligne.appendChild(statut);
+} else {
+    // L'utilisateur n'est pas encore dans les contacts
+    const boutonAjouter = document.createElement("button");
+    boutonAjouter.textContent = "Inviter";
+    boutonAjouter.type = "button";
 
-        ligne.append(nom, boutonAjouter);
-        resultatsRecherche.appendChild(ligne);
+    boutonAjouter.addEventListener("click", async function() {
+        boutonAjouter.disabled = true;
+        await envoyerInvitation(profil.id);
+        boutonAjouter.disabled = false;
+    });
+
+    ligne.appendChild(boutonAjouter);
+}
+
+resultatsRecherche.appendChild(ligne);
     }
 
     if (!resultatsRecherche.hasChildNodes()) {
         resultatsRecherche.textContent =
             "Aucun autre utilisateur trouvé.";
     }
+}
+
+// Envoyer une invitation de contact
+async function envoyerInvitation(destinataireId) {
+
+    const { error } = await supabaseClient
+        .from("invitations_contacts")
+        .insert({
+            expediteur_id: utilisateurActuel.id,
+            destinataire_id: destinataireId,
+            statut: "en_attente"
+        });
+
+    if (error) {
+        console.error(error);
+
+        if (error.code === "23505") {
+            alert("Une invitation est déjà en attente pour cet utilisateur.");
+        } else {
+            alert("Impossible d'envoyer l'invitation.");
+        }
+        return;
+    }
+
+    alert("Invitation envoyée avec succès !");
+    resultatsRecherche.replaceChildren();
+    champRecherche.value = "";
 }
 
 // Ajouter un contact dans Supabase
@@ -165,6 +220,163 @@ async function afficherContacts() {
         listeContacts.appendChild(ligne);
     }
 }
+
+// Afficher les invitations envoyées
+async function afficherInvitationsEnvoyees() {
+    invitationsEnvoyees.textContent = "Chargement des invitations...";
+
+    const { data, error } = await supabaseClient
+       .from("invitations_contacts")
+       .select("destinataire_id, statut, created_at")
+       .eq("expediteur_id", utilisateurActuel.id)
+       .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        invitationsEnvoyees.textContent =
+            "Erreur de chargement des invitations.";
+        return;
+    }
+
+    const idsDestinataires = data.map(invitation => invitation.destinataire_id);
+
+let profilsParId = new Map();
+
+if (idsDestinataires.length > 0) {
+    const { data: profils, error: erreurProfils } = await supabaseClient
+        .from("profiles")
+        .select("id, username")
+        .in("id", idsDestinataires);
+
+    if (erreurProfils) {
+        console.error(erreurProfils);
+        invitationsEnvoyees.textContent =
+            "Impossible de récupérer les noms des destinataires.";
+        return;
+    }
+
+    profilsParId = new Map(
+        profils.map(profil => [profil.id, profil.username])
+    );
+}
+
+    invitationsEnvoyees.replaceChildren();
+
+    if (data.length === 0) {
+        invitationsEnvoyees.textContent =
+            "Aucune invitation envoyée.";
+        return;
+    }
+
+    for (const invitation of data) {
+        const ligne = document.createElement("p");
+
+        const pseudo = profilsParId.get(invitation.destinataire_id)
+    ?? "Utilisateur inconnu";
+
+ligne.textContent =
+    pseudo + " — Statut : " + invitation.statut;
+
+        invitationsEnvoyees.appendChild(ligne);
+    }
+}
+
+
+async function afficherInvitationsRecues() {
+    invitationsRecues.textContent = "Chargement des invitations...";
+
+    const { data, error } = await supabaseClient
+        .from("invitations_contacts")
+        .select("id, expediteur_id, statut, created_at")
+        .eq("destinataire_id", utilisateurActuel.id)
+        .eq("statut", "en_attente")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        invitationsRecues.textContent =
+            "Erreur de chargement des invitations reçues.";
+        return;
+    }
+
+    invitationsRecues.replaceChildren();
+
+    if (data.length === 0) {
+        invitationsRecues.textContent = "Aucune invitation reçue.";
+        return;
+    }
+
+    const idsExpediteurs = data.map(invitation => invitation.expediteur_id);
+
+    const { data: profils, error: erreurProfils } = await supabaseClient
+        .from("profiles")
+        .select("id, username")
+        .in("id", idsExpediteurs);
+
+    if (erreurProfils) {
+        console.error(erreurProfils);
+        invitationsRecues.textContent =
+            "Impossible de récupérer les noms des expéditeurs.";
+        return;
+    }
+
+    const profilsParId = new Map(
+        profils.map(profil => [profil.id, profil.username])
+    );
+
+    for (const invitation of data) {
+    const ligne = document.createElement("p");
+
+    const pseudo = profilsParId.get(invitation.expediteur_id)
+        ?? "Utilisateur inconnu";
+
+    const nom = document.createElement("span");
+    nom.textContent = pseudo + " ";
+
+    const boutonAccepter = document.createElement("button");
+    boutonAccepter.type = "button";
+    boutonAccepter.textContent = "Accepter";
+
+    const boutonRefuser = document.createElement("button");
+    boutonRefuser.type = "button";
+    boutonRefuser.textContent = "Refuser";
+
+    async function repondre(accepter) {
+        boutonAccepter.disabled = true;
+        boutonRefuser.disabled = true;
+
+        const { error } = await supabaseClient.rpc(
+            "repondre_invitation",
+            {
+                p_invitation_id: invitation.id,
+                p_accepter: accepter
+            }
+        );
+
+        if (error) {
+            console.error(error);
+            alert("Impossible de traiter cette invitation.");
+
+            boutonAccepter.disabled = false;
+            boutonRefuser.disabled = false;
+            return;
+        }
+
+        alert(accepter ? "Invitation acceptée !" : "Invitation refusée !");
+
+        await afficherInvitationsRecues();
+        await afficherContacts();
+        await afficherInvitationsEnvoyees();
+    }
+
+    boutonAccepter.addEventListener("click", () => repondre(true));
+    boutonRefuser.addEventListener("click", () => repondre(false));
+
+    ligne.append(nom, boutonAccepter, boutonRefuser);
+    invitationsRecues.appendChild(ligne);
+}
+}
+
 
 // Activer le bouton Rechercher
 boutonRecherche.addEventListener("click", rechercherContact);
