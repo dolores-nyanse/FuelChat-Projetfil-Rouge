@@ -88,30 +88,39 @@ Les principaux fichiers sont organisés de la manière suivante :
 ```text
 FuelChat-Projetfil-Rouge/
 │
-├── index.html                 Accueil, inscription et connexion
-├── conversation.html          Interface de messagerie
-├── conversation.js            Logique de la messagerie
+├── index.html                   Accueil, inscription et connexion
+├── conversation.html            Interface de messagerie
+├── contacts.html                Interface de gestion des contacts
+├── carburant.html               Interface du calculateur de carburant
+├── parametre.html               Interface des paramètres
+├── motdepasse.html              Demande de récupération du mot de passe
+├── nouveau-motdepasse.html      Définition d'un nouveau mot de passe
 │
-├── contacts.html              Interface de gestion des contacts
-├── contacts.js                Recherche, contacts et invitations
+├── css/                         Feuilles de style
+│   ├── style.css                Styles généraux et page d'accueil
+│   ├── conversation.css         Styles de la messagerie
+│   ├── mobile.css               Adaptation aux appareils mobiles
+│   ├── contacts-mobile.css      Styles mobiles des contacts
+│   ├── carburant.css            Styles du module Carburant
+│   └── paramettre.css           Styles des paramètres
 │
-├── carburant.html             Interface du calculateur de carburant
-├── carburant.js               Calculs et interactions du module
-├── carburant.css              Présentation du module Carburant
-├── stations.js                Recherche et traitement des stations
+├── js/                          Scripts JavaScript
+│   ├── auth.js                  Inscription et connexion
+│   ├── script.js                Fonctionnement de la messagerie
+│   ├── contacts.js              Gestion des contacts et invitations
+│   ├── carburant.js             Calculs et interactions du module Carburant
+│   ├── stations.js              Recherche et traitement des stations
+│   ├── parametre.js             Fonctionnement des paramètres
+│   ├── motdepasse.js            Demande de récupération du mot de passe
+│   ├── nouveau-motdepasse.js    Mise à jour du mot de passe
+│   └── supabase-config.js       Configuration du client Supabase
 │
-├── parametre.html             Interface des paramètres
-├── supabase-config.js         Configuration du client Supabase
+├── supabase/                    Code source des fonctions serveur
+│   ├── calculer-trajet.ts       Fonction Edge de calcul d'itinéraire
+│   └── rechercher-stations.ts   Fonction Edge de recherche de stations
 │
-├── calculer-trajet.ts         Code source de l'Edge Function
-├── rechercher-stations.ts     Code source de l'Edge Function
-│
-└── README.md                  Documentation du projet
+└── README.md                    Documentation du projet
 ```
-
-D'autres fichiers CSS et JavaScript assurent la mise en forme et les fonctionnalités complémentaires des pages.
-
-Les fichiers TypeScript présents à la racine du dépôt constituent des copies du code des Edge Functions. Les versions exécutées par l'application sont déployées dans Supabase.
 
 ## Architecture
 
@@ -333,6 +342,8 @@ Le projet a été réalisé en équipe, avec une répartition des tâches entre 
 
 - **Intégration des API :** développement des Edge Functions en TypeScript pour connecter FuelChat à OpenRouteService et Gas Quebec.
 
+- **Organisation et test:** Organisation des fichiers css, js, ts. Verification et test des fonctionalites dans son ensemble. 
+
 
 ### Deborah Yassi
 
@@ -346,6 +357,6 @@ Le projet a été réalisé en équipe, avec une répartition des tâches entre 
 
 - **Adaptation des interfaces :** travail sur la présentation visuelle, l'organisation des éléments et l'adaptation des pages aux différents formats d'écran.
 
-Ensemble nous avons effectués les tests et apporté des améliorations globales au projet.
+
 
 
