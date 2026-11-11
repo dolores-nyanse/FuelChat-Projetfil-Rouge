@@ -8,10 +8,7 @@ body.page-contacts .contacts-menu .menu-link-carburant {
 }
 
 /* ===== THÈME CLAIR : ORDINATEUR ===== */
-/* style.css écrit toutes les couleurs de cette page en sombre.
-   Ce bloc ne s'active que lorsque le thème « Clair » est choisi
-   dans Paramètres (html[data-theme="clair"]).
-   Le thème sombre n'est pas modifié. */
+
 
 @media (min-width: 801px) {
 
@@ -96,10 +93,6 @@ body.page-contacts .contacts-menu .menu-link-carburant {
 }
 
 /* ===== TÉLÉPHONE : UNE SEULE COLONNE ===== */
-/* Même organisation que la page Paramètres :
-   logo en haut, onglets en une rangée, contenu en pleine largeur.
-   Ces règles ne s'appliquent qu'aux écrans de téléphone.
-   La version ordinateur n'est pas modifiée. */
 
 @media (max-width: 800px) {
 

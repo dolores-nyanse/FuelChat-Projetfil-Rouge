@@ -163,7 +163,7 @@
 }
 
 /* ===== THÈME CLAIR ===== */
-/* Conserver le choix de thème existant */
+
 
 html[data-theme="light"] #contenuParametres,
 html[data-theme="clair"] #contenuParametres {
